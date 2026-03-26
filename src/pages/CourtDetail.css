@@ -1,0 +1,374 @@
+/* === COURT DETAIL PAGE === */
+.court-detail-page {
+  padding-top: 90px;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  transition: var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--primary);
+}
+
+.cd-header-info {
+  margin-bottom: 24px;
+}
+
+.cd-badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cd-header-info h1 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.cd-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cd-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Visual */
+.cd-visual {
+  margin-bottom: 32px;
+}
+
+.cd-main-img {
+  height: 280px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cd-emoji {
+  font-size: 6rem;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3));
+}
+
+/* Content Layout */
+.cd-content {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 32px;
+}
+
+.cd-section {
+  margin-bottom: 36px;
+}
+
+.cd-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Fasilitas */
+.cd-facilities {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.facility-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.facility-check {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* Court Tabs */
+.court-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.court-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
+  text-align: left;
+}
+
+.court-tab:hover {
+  border-color: var(--primary);
+}
+
+.court-tab.active {
+  border-color: var(--primary);
+  background: rgba(0,200,83,0.08);
+}
+
+.ct-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.ct-price {
+  font-size: 0.8rem;
+  color: var(--primary);
+}
+
+/* Date Selector */
+.date-selector {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.date-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
+  min-width: 60px;
+}
+
+.date-btn:hover { border-color: var(--primary); }
+.date-btn.active { background: var(--primary); border-color: var(--primary); }
+.date-btn.active .date-day, .date-btn.active .date-num { color: #fff; }
+
+.date-day {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.date-num {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Schedule Grid */
+.schedule-legend {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.legend-dot.available { background: rgba(0,200,83,0.2); border: 1px solid var(--primary); }
+.legend-dot.booked { background: rgba(239,68,68,0.2); border: 1px solid var(--accent-red); }
+.legend-dot.selected { background: var(--primary); }
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.schedule-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 10px;
+  background: rgba(0,200,83,0.05);
+  border: 1px solid rgba(0,200,83,0.15);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+.schedule-slot:hover:not(:disabled) {
+  background: rgba(0,200,83,0.12);
+  border-color: var(--primary);
+}
+
+.schedule-slot.booked {
+  background: rgba(239,68,68,0.05);
+  border-color: rgba(239,68,68,0.15);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.schedule-slot.selected {
+  background: rgba(0,200,83,0.2);
+  border-color: var(--primary);
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+.slot-time {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.schedule-slot.booked .slot-time { color: var(--accent-red); }
+
+.slot-price {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.slot-status {
+  font-size: 0.7rem;
+  color: var(--primary);
+}
+
+.schedule-slot.booked .slot-status { color: var(--accent-red); }
+
+/* Reviews */
+.cd-review {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cd-review-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.cd-review-avatar {
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  background: var(--bg-elevated);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cd-review-name { font-weight: 600; font-size: 0.9rem; }
+.cd-review-stars { display: flex; gap: 2px; }
+.cd-review-date { margin-left: auto; font-size: 0.8rem; color: var(--text-muted); }
+.cd-review-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+.no-review-text { color: var(--text-muted); font-size: 0.9rem; }
+
+/* Sidebar */
+.cd-sidebar {
+  position: sticky;
+  top: 90px;
+  align-self: start;
+}
+
+.booking-summary h3 {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.bs-venue {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.bs-court {
+  font-size: 0.9rem;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.bs-date {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.bs-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.bs-slot-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.bs-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin-bottom: 16px;
+}
+
+.bs-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.bs-total-price {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.bs-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 20px 0;
+}
+
+@media (max-width: 900px) {
+  .cd-content { grid-template-columns: 1fr; }
+  .cd-sidebar { position: static; }
+  .cd-facilities { grid-template-columns: repeat(2, 1fr); }
+  .schedule-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .schedule-grid { grid-template-columns: repeat(2, 1fr); }
+  .cd-facilities { grid-template-columns: 1fr; }
+}

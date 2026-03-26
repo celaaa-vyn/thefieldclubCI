@@ -1,0 +1,378 @@
+/* === BOOKING PAGE === */
+.booking-page {
+  padding-top: 90px;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.booking-title {
+  font-size: 2rem;
+  margin-bottom: 32px;
+}
+
+/* Steps */
+.booking-steps {
+  display: flex;
+  align-items: center;
+  margin-bottom: 48px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-muted);
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.step-item.active .step-circle {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+.step-item.completed .step-circle {
+  background: var(--primary-dark);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.step-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.step-item.active .step-label { color: var(--text-primary); font-weight: 600; }
+.step-item.completed .step-label { color: var(--primary); }
+
+.step-line {
+  width: 40px;
+  height: 2px;
+  background: var(--border-color);
+  margin: 0 8px;
+  flex-shrink: 0;
+}
+
+.step-item.completed + .step-item .step-line,
+.step-item.completed .step-line {
+  background: var(--primary);
+}
+
+/* Step Content */
+.step-content h2 {
+  font-size: 1.4rem;
+  margin-bottom: 24px;
+}
+
+.step-note {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  margin-top: -16px;
+}
+
+.optional-tag {
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.08);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-weight: 400;
+  vertical-align: middle;
+}
+
+/* Sport Select */
+.sport-select-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.sport-select-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: var(--transition);
+  color: var(--text-primary);
+}
+
+.sport-select-card:hover { border-color: var(--primary); }
+.sport-select-card.selected { border-color: var(--primary); background: rgba(0,200,83,0.08); box-shadow: var(--shadow-glow); }
+
+.ssc-icon { font-size: 2rem; }
+.ssc-name { font-weight: 600; font-size: 1rem; }
+.ssc-price { font-size: 0.8rem; color: var(--text-muted); }
+
+/* Venue Select */
+.venue-select-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.venue-select-card {
+  text-align: left;
+  transition: var(--transition);
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.venue-select-card.selected { border-color: var(--primary); background: rgba(0,200,83,0.05); }
+.venue-select-card h4 { font-size: 1rem; margin-bottom: 4px; color: var(--text-primary); }
+.venue-select-card p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
+.vsc-rating { font-size: 0.85rem; }
+
+/* Date Input */
+.date-input {
+  max-width: 300px;
+  font-size: 1rem;
+  padding: 14px 18px;
+}
+
+/* Time Slots */
+.time-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.time-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  color: var(--text-primary);
+}
+
+.time-slot:hover { border-color: var(--primary); }
+.time-slot.selected { border-color: var(--primary); background: rgba(0,200,83,0.1); box-shadow: var(--shadow-glow); }
+
+.ts-time { font-weight: 600; }
+.ts-price { font-size: 0.8rem; color: var(--text-muted); }
+
+/* Add-On Select */
+.addon-select-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.addon-select-card {
+  position: relative;
+  text-align: left;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: var(--transition);
+}
+
+.addon-select-card.selected { border-color: var(--primary); }
+
+.asc-icon { font-size: 2rem; display: block; margin-bottom: 8px; }
+.addon-select-card h4 { font-size: 1rem; margin-bottom: 4px; color: var(--text-primary); }
+.addon-select-card p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
+.asc-price { font-weight: 700; color: var(--primary); }
+.asc-check {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+/* Payment */
+.payment-groups {
+  margin-bottom: 32px;
+}
+
+.payment-group {
+  margin-bottom: 24px;
+}
+
+.payment-group h4 {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.payment-methods {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.payment-method {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  color: var(--text-primary);
+  position: relative;
+}
+
+.payment-method:hover { border-color: var(--primary); }
+.payment-method.selected { border-color: var(--primary); background: rgba(0,200,83,0.05); }
+
+.pm-icon { font-size: 1.2rem; }
+.pm-name { font-size: 0.9rem; }
+.pm-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* Final Summary */
+.booking-final-summary {
+  margin-top: 32px;
+}
+
+.booking-final-summary h3 {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.bfs-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.bfs-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 8px 0;
+}
+
+.bfs-total {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--primary) !important;
+}
+
+.bfs-total span:last-child {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.3rem;
+}
+
+/* Navigation */
+.booking-nav {
+  display: flex;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.booking-nav .btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Success */
+.booking-success {
+  text-align: center;
+  padding: 60px 0;
+}
+
+.success-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.booking-success h2 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.booking-success > p {
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+.success-details {
+  max-width: 500px;
+  margin: 0 auto 32px;
+  text-align: left;
+}
+
+.sd-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.sd-row.total {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 1.1rem;
+  border: none;
+}
+
+.success-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .sport-select-grid { grid-template-columns: repeat(2, 1fr); }
+  .venue-select-grid { grid-template-columns: 1fr; }
+  .time-slot-grid { grid-template-columns: repeat(3, 1fr); }
+  .addon-select-grid { grid-template-columns: 1fr; }
+  .payment-methods { grid-template-columns: repeat(2, 1fr); }
+  .booking-steps { gap: 0; }
+  .step-label { display: none; }
+}
+
+@media (max-width: 480px) {
+  .sport-select-grid,
+  .time-slot-grid,
+  .payment-methods { grid-template-columns: repeat(2, 1fr); }
+}

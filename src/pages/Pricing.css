@@ -1,0 +1,190 @@
+/* === PRICING PAGE === */
+.pricing-page {
+  padding-top: 100px;
+  min-height: 100vh;
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.pricing-header .section-subtitle {
+  margin: 8px auto 0;
+}
+
+/* Price Sport Cards */
+.price-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 80px;
+}
+
+.price-sport-card {
+  text-align: center;
+  animation: fadeInUp 0.5s ease both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.price-sport-header {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.price-sport-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+
+.price-sport-header h3 {
+  font-size: 1.2rem;
+}
+
+.price-sport-body {
+  margin-bottom: 20px;
+}
+
+.price-range {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.price-per {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.price-sport-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Membership */
+.membership-section {
+  margin-bottom: 80px;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.plan-card {
+  position: relative;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.plan-highlight {
+  border-color: var(--primary) !important;
+  box-shadow: var(--shadow-glow) !important;
+}
+
+.plan-badge {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: var(--primary);
+  color: #fff;
+  padding: 4px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.plan-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+
+.plan-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.plan-features {
+  list-style: none;
+  margin-bottom: 24px;
+}
+
+.plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.check-icon {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+/* Add-ons */
+.addon-section {
+  padding-bottom: 80px;
+}
+
+.addon-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.addon-card {
+  text-align: center;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.addon-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.addon-card h4 {
+  margin-bottom: 8px;
+}
+
+.addon-card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.addon-price {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+@media (max-width: 900px) {
+  .price-cards-grid,
+  .plans-grid { grid-template-columns: repeat(2, 1fr); }
+  .addon-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .price-cards-grid,
+  .plans-grid,
+  .addon-grid { grid-template-columns: 1fr; }
+}
