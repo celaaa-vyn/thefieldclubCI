@@ -1,13 +1,15 @@
-/* === BOOKING PAGE === */
+/* === BOOKING PAGE — Bright Outdoor Theme === */
 .booking-page {
   padding-top: 90px;
   min-height: 100vh;
   padding-bottom: 60px;
+  background: var(--bg-primary);
 }
 
 .booking-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 32px;
+  letter-spacing: 2px;
 }
 
 /* Steps */
@@ -43,10 +45,10 @@
 }
 
 .step-item.active .step-circle {
-  background: var(--primary);
-  border-color: var(--primary);
+  background: var(--accent-orange);
+  border-color: var(--accent-orange);
   color: #fff;
-  box-shadow: 0 0 12px var(--primary-glow);
+  box-shadow: 0 0 12px var(--accent-orange-glow);
 }
 
 .step-item.completed .step-circle {
@@ -58,6 +60,9 @@
 .step-label {
   font-size: 0.85rem;
   color: var(--text-muted);
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .step-item.active .step-label { color: var(--text-primary); font-weight: 600; }
@@ -78,8 +83,9 @@
 
 /* Step Content */
 .step-content h2 {
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   margin-bottom: 24px;
+  letter-spacing: 1px;
 }
 
 .step-note {
@@ -91,7 +97,7 @@
 
 .optional-tag {
   font-size: 0.75rem;
-  background: rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.05);
   padding: 4px 10px;
   border-radius: var(--radius-full);
   color: var(--text-muted);
@@ -117,10 +123,11 @@
   border-radius: var(--radius-lg);
   transition: var(--transition);
   color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
 }
 
-.sport-select-card:hover { border-color: var(--primary); }
-.sport-select-card.selected { border-color: var(--primary); background: rgba(0,200,83,0.08); box-shadow: var(--shadow-glow); }
+.sport-select-card:hover { border-color: var(--accent-orange); }
+.sport-select-card.selected { border-color: var(--accent-orange); background: rgba(255, 107, 43, 0.05); box-shadow: var(--shadow-orange-glow); }
 
 .ssc-icon { font-size: 2rem; }
 .ssc-name { font-weight: 600; font-size: 1rem; }
@@ -140,8 +147,8 @@
   border: 2px solid transparent;
 }
 
-.venue-select-card.selected { border-color: var(--primary); background: rgba(0,200,83,0.05); }
-.venue-select-card h4 { font-size: 1rem; margin-bottom: 4px; color: var(--text-primary); }
+.venue-select-card.selected { border-color: var(--primary); background: rgba(76, 175, 80, 0.05); }
+.venue-select-card h4 { font-size: 1.2rem; margin-bottom: 4px; color: var(--text-primary); letter-spacing: 1px; }
 .venue-select-card p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
 .vsc-rating { font-size: 0.85rem; }
 
@@ -170,10 +177,11 @@
   border-radius: var(--radius-md);
   transition: var(--transition);
   color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
 }
 
-.time-slot:hover { border-color: var(--primary); }
-.time-slot.selected { border-color: var(--primary); background: rgba(0,200,83,0.1); box-shadow: var(--shadow-glow); }
+.time-slot:hover { border-color: var(--accent-orange); }
+.time-slot.selected { border-color: var(--accent-orange); background: rgba(255, 107, 43, 0.06); box-shadow: var(--shadow-orange-glow); }
 
 .ts-time { font-weight: 600; }
 .ts-price { font-size: 0.8rem; color: var(--text-muted); }
@@ -196,9 +204,9 @@
 .addon-select-card.selected { border-color: var(--primary); }
 
 .asc-icon { font-size: 2rem; display: block; margin-bottom: 8px; }
-.addon-select-card h4 { font-size: 1rem; margin-bottom: 4px; color: var(--text-primary); }
+.addon-select-card h4 { font-size: 1.2rem; margin-bottom: 4px; color: var(--text-primary); letter-spacing: 1px; }
 .addon-select-card p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
-.asc-price { font-weight: 700; color: var(--primary); }
+.asc-price { font-weight: 700; color: var(--accent-orange); }
 .asc-check {
   position: absolute;
   top: 12px;
@@ -224,11 +232,12 @@
 }
 
 .payment-group h4 {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   margin-bottom: 12px;
+  font-family: 'Bebas Neue', sans-serif;
 }
 
 .payment-methods {
@@ -248,10 +257,11 @@
   transition: var(--transition);
   color: var(--text-primary);
   position: relative;
+  box-shadow: var(--shadow-sm);
 }
 
-.payment-method:hover { border-color: var(--primary); }
-.payment-method.selected { border-color: var(--primary); background: rgba(0,200,83,0.05); }
+.payment-method:hover { border-color: var(--accent-orange); }
+.payment-method.selected { border-color: var(--accent-orange); background: rgba(255, 107, 43, 0.04); }
 
 .pm-icon { font-size: 1.2rem; }
 .pm-name { font-size: 0.9rem; }
@@ -259,7 +269,7 @@
   position: absolute;
   top: 8px;
   right: 8px;
-  color: var(--primary);
+  color: var(--accent-orange);
   font-weight: 700;
 }
 
@@ -269,8 +279,9 @@
 }
 
 .booking-final-summary h3 {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   margin-bottom: 16px;
+  letter-spacing: 1px;
 }
 
 .bfs-row {
@@ -290,12 +301,13 @@
 .bfs-total {
   font-weight: 700;
   font-size: 1.1rem;
-  color: var(--primary) !important;
+  color: var(--accent-orange) !important;
 }
 
 .bfs-total span:last-child {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.3rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
 }
 
 /* Navigation */
@@ -324,8 +336,9 @@
 }
 
 .booking-success h2 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 12px;
+  letter-spacing: 2px;
 }
 
 .booking-success > p {
@@ -350,7 +363,7 @@
 
 .sd-row.total {
   font-weight: 700;
-  color: var(--primary);
+  color: var(--accent-orange);
   font-size: 1.1rem;
   border: none;
 }

@@ -1,11 +1,11 @@
-/* Navbar */
+/* Navbar — Bright Outdoor Theme */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(10, 15, 26, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-color);
   height: 70px;
@@ -23,19 +23,20 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
-  font-size: 1.3rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
   z-index: 10;
 }
 
 .logo-icon {
   font-size: 1.5rem;
-  filter: drop-shadow(0 0 8px var(--primary-glow));
+  filter: drop-shadow(0 0 8px var(--accent-orange-glow));
 }
 
 .logo-text {
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  background: linear-gradient(135deg, var(--accent-orange), var(--primary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -55,16 +56,19 @@
   font-weight: 500;
   color: var(--text-secondary);
   transition: var(--transition-fast);
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .nav-link:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .nav-link.active {
-  color: var(--primary);
-  background: rgba(0, 200, 83, 0.1);
+  color: var(--accent-orange);
+  background: rgba(255, 107, 43, 0.08);
 }
 
 /* Aksi kanan */
@@ -83,13 +87,13 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.04);
   color: var(--text-secondary);
   transition: var(--transition-fast);
 }
 
 .nav-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.08);
   color: var(--text-primary);
 }
 
@@ -142,7 +146,8 @@
 }
 
 .dropdown-header h4 {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
 }
 
 .dropdown-footer {
@@ -150,13 +155,13 @@
   text-align: center;
   padding: 12px;
   font-size: 0.85rem;
-  color: var(--primary);
+  color: var(--accent-orange);
   font-weight: 500;
   border-top: 1px solid var(--border-color);
 }
 
 .dropdown-footer:hover {
-  background: rgba(0, 200, 83, 0.05);
+  background: rgba(255, 107, 43, 0.04);
 }
 
 .dropdown-divider {
@@ -173,7 +178,7 @@
 }
 
 .dropdown-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.03);
   color: var(--text-primary);
 }
 
@@ -191,11 +196,11 @@
 }
 
 .notif-item:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .notif-item.unread {
-  background: rgba(0, 200, 83, 0.03);
+  background: rgba(255, 107, 43, 0.03);
 }
 
 .notif-dot {
@@ -208,7 +213,7 @@
 }
 
 .notif-item.unread .notif-dot {
-  background: var(--primary);
+  background: var(--accent-orange);
 }
 
 .notif-title {
@@ -245,7 +250,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--bg-elevated);
+  background: var(--bg-secondary);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,7 +1,8 @@
-/* === PRICING PAGE === */
+/* === PRICING PAGE — Bright Outdoor Theme === */
 .pricing-page {
   padding-top: 100px;
   min-height: 100vh;
+  background: var(--bg-primary);
 }
 
 .pricing-header {
@@ -51,7 +52,8 @@
 }
 
 .price-sport-header h3 {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
 }
 
 .price-sport-body {
@@ -59,10 +61,11 @@
 }
 
 .price-range {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
   margin-bottom: 4px;
+  letter-spacing: 1px;
 }
 
 .price-per {
@@ -94,25 +97,28 @@
 }
 
 .plan-highlight {
-  border-color: var(--primary) !important;
-  box-shadow: var(--shadow-glow) !important;
+  border-color: var(--accent-orange) !important;
+  box-shadow: var(--shadow-orange-glow) !important;
 }
 
 .plan-badge {
   position: absolute;
   top: -12px;
   right: 20px;
-  background: var(--primary);
+  background: var(--accent-orange);
   color: #fff;
   padding: 4px 16px;
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .plan-card h3 {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   margin-bottom: 4px;
+  letter-spacing: 1px;
 }
 
 .plan-desc {
@@ -164,6 +170,8 @@
 
 .addon-card h4 {
   margin-bottom: 8px;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
 }
 
 .addon-card p {
@@ -174,7 +182,7 @@
 
 .addon-price {
   font-weight: 700;
-  color: var(--primary);
+  color: var(--accent-orange);
 }
 
 @media (max-width: 900px) {

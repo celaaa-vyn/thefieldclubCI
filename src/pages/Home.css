@@ -1,4 +1,4 @@
-/* === HOME PAGE === */
+/* === HOME PAGE — Bright Outdoor Theme === */
 
 /* Hero */
 .hero {
@@ -10,31 +10,35 @@
   overflow: hidden;
 }
 
-.hero-bg {
+.hero-3d-canvas {
   position: absolute;
   inset: 0;
   z-index: 0;
 }
 
-.hero-gradient {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 30% 50%, rgba(0,200,83,0.12) 0%, transparent 60%),
-              radial-gradient(ellipse at 70% 20%, rgba(59,130,246,0.08) 0%, transparent 50%);
+.hero-3d-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 
-.hero-grid-pattern {
+.hero-overlay {
   position: absolute;
   inset: 0;
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(250, 251, 254, 0.1) 0%,
+    rgba(250, 251, 254, 0.3) 40%,
+    rgba(250, 251, 254, 0.7) 80%,
+    rgba(250, 251, 254, 1) 100%
+  );
+  pointer-events: none;
 }
 
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 64px;
@@ -48,24 +52,30 @@
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  background: rgba(0,200,83,0.1);
-  border: 1px solid rgba(0,200,83,0.2);
+  background: rgba(255, 107, 43, 0.1);
+  border: 1px solid rgba(255, 107, 43, 0.25);
   border-radius: var(--radius-full);
-  color: var(--primary);
+  color: var(--accent-orange);
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 24px;
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .hero-text h1 {
-  font-size: 4rem;
-  font-weight: 800;
-  line-height: 1.1;
+  font-size: 5rem;
+  font-weight: 400;
+  line-height: 1.05;
   margin-bottom: 24px;
+  color: var(--text-primary);
+  letter-spacing: 3px;
+  text-shadow: 0 2px 20px rgba(255,255,255,0.5);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  background: linear-gradient(135deg, var(--accent-orange), var(--primary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -77,6 +87,7 @@
   line-height: 1.7;
   max-width: 500px;
   margin-bottom: 32px;
+  font-family: 'Barlow Condensed', sans-serif;
 }
 
 .hero-actions {
@@ -96,18 +107,22 @@
 }
 
 .stat-value {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 400;
   color: var(--text-primary);
+  letter-spacing: 1px;
 }
 
 .stat-label {
   font-size: 0.8rem;
   color: var(--text-muted);
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Hero visual */
+/* Hero visual (floating cards) */
 .hero-visual {
   position: relative;
   height: 500px;
@@ -119,11 +134,11 @@
   align-items: center;
   gap: 14px;
   padding: 18px 24px;
-  background: rgba(26, 34, 53, 0.9);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
-  border: 1px solid var(--border-light);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   animation: float 6s ease-in-out infinite;
 }
 
@@ -138,13 +153,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,200,83,0.1);
+  background: rgba(255, 107, 43, 0.1);
   border-radius: var(--radius-md);
 }
 
 .hc-title {
   font-weight: 600;
   font-size: 1rem;
+  color: var(--text-primary);
 }
 
 .hc-sub {
@@ -155,7 +171,7 @@
 .hero-ring {
   position: absolute;
   border-radius: 50%;
-  border: 1px solid rgba(0,200,83,0.1);
+  border: 1px solid rgba(76, 175, 80, 0.15);
 }
 
 .hero-ring-1 {
@@ -172,7 +188,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border-color: rgba(0,200,83,0.05);
+  border-color: rgba(255, 107, 43, 0.1);
 }
 
 /* Section Header */
@@ -190,6 +206,10 @@
 }
 
 /* Sports Grid */
+.sports-section {
+  background: var(--bg-primary);
+}
+
 .sports-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -205,11 +225,12 @@
   animation: fadeInUp 0.5s ease both;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-sm);
 }
 
 .sport-card:hover {
-  border-color: var(--primary);
-  box-shadow: var(--shadow-glow);
+  border-color: var(--accent-orange);
+  box-shadow: var(--shadow-orange-glow);
   transform: translateY(-4px);
 }
 
@@ -225,8 +246,9 @@
 }
 
 .sport-card h3 {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   margin-bottom: 8px;
+  letter-spacing: 1px;
 }
 
 .sport-card p {
@@ -247,6 +269,10 @@
 }
 
 /* Features Grid */
+.features-section {
+  background: var(--bg-secondary);
+}
+
 .features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -263,8 +289,8 @@
   width: 56px;
   height: 56px;
   border-radius: var(--radius-md);
-  background: rgba(0,200,83,0.1);
-  color: var(--primary);
+  background: rgba(255, 107, 43, 0.1);
+  color: var(--accent-orange);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -272,8 +298,9 @@
 }
 
 .feature-card h3 {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   margin-bottom: 10px;
+  letter-spacing: 1px;
 }
 
 .feature-card p {
@@ -283,6 +310,10 @@
 }
 
 /* Venues Grid */
+.venues-section {
+  background: var(--bg-primary);
+}
+
 .venues-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -304,7 +335,7 @@
 
 .venue-emoji {
   font-size: 4rem;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
 }
 
 .venue-info {
@@ -319,8 +350,9 @@
 }
 
 .venue-info h3 {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   margin-bottom: 8px;
+  letter-spacing: 1px;
 }
 
 .venue-location {
@@ -351,6 +383,10 @@
 }
 
 /* Reviews Grid */
+.reviews-section {
+  background: var(--bg-secondary);
+}
+
 .reviews-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -372,7 +408,7 @@
   font-size: 2rem;
   width: 48px;
   height: 48px;
-  background: var(--bg-elevated);
+  background: var(--bg-secondary);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -403,23 +439,29 @@
 }
 
 /* CTA Section */
+.cta-section {
+  background: var(--bg-primary);
+}
+
 .cta-box {
-  background: linear-gradient(135deg, rgba(0,200,83,0.15), rgba(0,200,83,0.05));
-  border: 1px solid rgba(0,200,83,0.2);
+  background: linear-gradient(135deg, rgba(255, 107, 43, 0.08), rgba(76, 175, 80, 0.08));
+  border: 1px solid rgba(255, 107, 43, 0.15);
   border-radius: var(--radius-xl);
   padding: 64px;
   text-align: center;
 }
 
 .cta-text h2 {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   margin-bottom: 16px;
+  letter-spacing: 3px;
 }
 
 .cta-text p {
   font-size: 1.1rem;
   color: var(--text-secondary);
   margin-bottom: 32px;
+  font-family: 'Barlow Condensed', sans-serif;
 }
 
 .cta-actions {
@@ -435,7 +477,7 @@
     text-align: center;
   }
 
-  .hero-text h1 { font-size: 3rem; }
+  .hero-text h1 { font-size: 3.5rem; }
   .hero-desc { margin: 0 auto 32px; }
   .hero-actions { justify-content: center; }
   .hero-stats { justify-content: center; }
@@ -447,7 +489,7 @@
 }
 
 @media (max-width: 640px) {
-  .hero-text h1 { font-size: 2.2rem; }
+  .hero-text h1 { font-size: 2.5rem; }
   .hero-stats { flex-wrap: wrap; gap: 20px; }
   .hero-actions { flex-direction: column; align-items: center; }
 
@@ -457,7 +499,7 @@
   .reviews-grid { grid-template-columns: 1fr; }
 
   .cta-box { padding: 36px 24px; }
-  .cta-text h2 { font-size: 1.8rem; }
+  .cta-text h2 { font-size: 2.5rem; }
   .cta-actions { flex-direction: column; align-items: center; }
   
   .section-header { flex-direction: column; align-items: flex-start; gap: 16px; }
