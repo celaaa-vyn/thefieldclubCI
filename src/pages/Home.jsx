@@ -4,229 +4,308 @@ import { Search, Calendar, CreditCard, Star, ArrowRight, ChevronRight, Users, Ma
 import { sports, venues, reviews } from '../data/mockData';
 import './Home.css';
 
-function init3DScene(canvasContainer) {
+/* ======================================================
+   3D FLOATING BALLS — on a transparent canvas overlay
+   Uses procedurally generated textures for realism
+====================================================== */
+function init3DOverlay(canvasContainer) {
   const THREE = window.THREE;
   const gsap = window.gsap;
   const ScrollTrigger = window.ScrollTrigger;
-
   if (!THREE || !gsap || !ScrollTrigger) return null;
-
   gsap.registerPlugin(ScrollTrigger);
 
   const scene = new THREE.Scene();
 
-  // Camera
-  const camera = new THREE.PerspectiveCamera(60, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 2000);
-  camera.position.set(0, 12, 35);
-  camera.lookAt(0, 2, 0);
+  const camera = new THREE.PerspectiveCamera(50, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 500);
+  camera.position.set(0, 0, 30);
 
-  // Renderer
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.6;
+  renderer.toneMappingExposure = 1.4;
+  renderer.setClearColor(0x000000, 0); // Fully transparent
   canvasContainer.appendChild(renderer.domElement);
 
-  // Sky
-  if (THREE.Sky) {
-    const sky = new THREE.Sky();
-    sky.scale.setScalar(1000);
-    scene.add(sky);
+  // ========== LIGHTING (like outdoor sunlight) ==========
+  const sunLight = new THREE.DirectionalLight(0xFFF5E0, 3.0);
+  sunLight.position.set(5, 10, 8);
+  scene.add(sunLight);
 
-    const skyUniforms = sky.material.uniforms;
-    skyUniforms['turbidity'].value = 2;
-    skyUniforms['rayleigh'].value = 1.5;
-    skyUniforms['mieCoefficient'].value = 0.005;
-    skyUniforms['mieDirectionalG'].value = 0.8;
+  const fillLight = new THREE.DirectionalLight(0xA0C4FF, 0.8);
+  fillLight.position.set(-5, 2, -3);
+  scene.add(fillLight);
 
-    const sun = new THREE.Vector3();
-    const phi = THREE.MathUtils.degToRad(90 - 45);
-    const theta = THREE.MathUtils.degToRad(180);
-    sun.setFromSphericalCoords(1, phi, theta);
-    skyUniforms['sunPosition'].value.copy(sun);
-  } else {
-    // Fallback sky color
-    scene.background = new THREE.Color(0x87CEEB);
-  }
-
-  // Lighting
-  const dirLight = new THREE.DirectionalLight(0xfff4e0, 1.5);
-  dirLight.position.set(10, 20, 10);
-  dirLight.castShadow = false;
-  scene.add(dirLight);
-
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+  const ambientLight = new THREE.AmbientLight(0x87CEEB, 0.6);
   scene.add(ambientLight);
 
-  const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x4CAF50, 0.4);
+  const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x4CAF50, 0.5);
   scene.add(hemiLight);
 
-  // Ground/Field
-  const fieldGeo = new THREE.PlaneGeometry(80, 80);
-  const fieldMat = new THREE.MeshStandardMaterial({
-    color: 0x4CAF50,
-    roughness: 0.9,
-    metalness: 0.0,
-  });
-  const field = new THREE.Mesh(fieldGeo, fieldMat);
-  field.rotation.x = -Math.PI / 2;
-  field.position.y = -0.1;
-  scene.add(field);
+  // ========== GENERATE TEXTURES VIA CANVAS ==========
 
-  // Field Lines
-  const lineMat = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 });
-
-  // Outer boundary
-  const outerPts = [
-    new THREE.Vector3(-20, 0.01, -15),
-    new THREE.Vector3(20, 0.01, -15),
-    new THREE.Vector3(20, 0.01, 15),
-    new THREE.Vector3(-20, 0.01, 15),
-    new THREE.Vector3(-20, 0.01, -15),
-  ];
-  const outerGeo = new THREE.BufferGeometry().setFromPoints(outerPts);
-  scene.add(new THREE.Line(outerGeo, lineMat));
-
-  // Center line
-  const centerLinePts = [new THREE.Vector3(0, 0.01, -15), new THREE.Vector3(0, 0.01, 15)];
-  scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(centerLinePts), lineMat));
-
-  // Center circle
-  const circlePoints = [];
-  for (let i = 0; i <= 64; i++) {
-    const angle = (i / 64) * Math.PI * 2;
-    circlePoints.push(new THREE.Vector3(Math.cos(angle) * 5, 0.01, Math.sin(angle) * 5));
+  function createFootballTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    
+    // White base
+    ctx.fillStyle = '#F8F8F8';
+    ctx.fillRect(0, 0, 512, 256);
+    
+    // Draw pentagon patterns (classic football look)
+    const pentagonPositions = [
+      [128, 64], [384, 64], [64, 160], [256, 128], [448, 160],
+      [192, 192], [320, 192], [128, 230], [384, 230], [256, 30],
+      [50, 60], [462, 60], [256, 240]
+    ];
+    
+    ctx.fillStyle = '#1A1A1A';
+    pentagonPositions.forEach(([px, py]) => {
+      ctx.beginPath();
+      for (let i = 0; i < 5; i++) {
+        const angle = (i * 72 - 90) * Math.PI / 180;
+        const r = 22;
+        const x = px + r * Math.cos(angle);
+        const y = py + r * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+    });
+    
+    // Seam lines connecting pentagons
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1.5;
+    pentagonPositions.forEach(([px, py]) => {
+      for (let i = 0; i < 5; i++) {
+        const angle = (i * 72 - 90) * Math.PI / 180;
+        const r = 22;
+        ctx.beginPath();
+        ctx.moveTo(px + r * Math.cos(angle), py + r * Math.sin(angle));
+        ctx.lineTo(px + (r + 16) * Math.cos(angle), py + (r + 16) * Math.sin(angle));
+        ctx.stroke();
+      }
+    });
+    
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    return tex;
   }
-  scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(circlePoints), lineMat));
 
-  // Sports Balls
+  function createBasketballTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    
+    // Orange leather base with subtle grain
+    const gradient = ctx.createLinearGradient(0, 0, 512, 256);
+    gradient.addColorStop(0, '#D4581C');
+    gradient.addColorStop(0.3, '#E8651E');
+    gradient.addColorStop(0.5, '#F07020');
+    gradient.addColorStop(0.7, '#E8651E');
+    gradient.addColorStop(1, '#D4581C');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 512, 256);
+    
+    // Add leather grain texture
+    for (let i = 0; i < 3000; i++) {
+      const x = Math.random() * 512;
+      const y = Math.random() * 256;
+      ctx.fillStyle = `rgba(${Math.random() > 0.5 ? 180 : 100}, ${Math.random() > 0.5 ? 60 : 40}, ${Math.random() > 0.5 ? 15 : 5}, 0.15)`;
+      ctx.fillRect(x, y, 2, 1);
+    }
+    
+    // Main seam lines (black, thick)
+    ctx.strokeStyle = '#1A1A1A';
+    ctx.lineWidth = 3.5;
+    
+    // Horizontal seam
+    ctx.beginPath();
+    ctx.moveTo(0, 128);
+    ctx.lineTo(512, 128);
+    ctx.stroke();
+    
+    // Vertical seam
+    ctx.beginPath();
+    ctx.moveTo(256, 0);
+    ctx.lineTo(256, 256);
+    ctx.stroke();
+    
+    // Curved side seams
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(0, 128);
+    for (let x = 0; x <= 512; x += 2) {
+      const y = 128 + Math.sin((x / 512) * Math.PI * 2) * 80;
+      ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.moveTo(0, 128);
+    for (let x = 0; x <= 512; x += 2) {
+      const y = 128 - Math.sin((x / 512) * Math.PI * 2) * 80;
+      ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    return tex;
+  }
+
+  function createTennisBallTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    
+    // Yellow-green felt base
+    ctx.fillStyle = '#C8D820';
+    ctx.fillRect(0, 0, 512, 256);
+    
+    // Add fuzzy texture
+    for (let i = 0; i < 8000; i++) {
+      const x = Math.random() * 512;
+      const y = Math.random() * 256;
+      const brightness = Math.random();
+      ctx.fillStyle = `rgba(${170 + brightness * 60}, ${195 + brightness * 40}, ${brightness > 0.5 ? 20 : 0}, 0.12)`;
+      ctx.beginPath();
+      ctx.arc(x, y, 1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Characteristic curved white seam
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 4;
+    ctx.shadowColor = 'rgba(0,0,0,0.2)';
+    ctx.shadowBlur = 2;
+    
+    ctx.beginPath();
+    for (let x = 0; x <= 512; x += 2) {
+      const t = (x / 512) * Math.PI * 2;
+      const y = 128 + Math.sin(t * 2) * 60;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    
+    ctx.beginPath();
+    for (let x = 0; x <= 512; x += 2) {
+      const t = (x / 512) * Math.PI * 2;
+      const y = 128 - Math.sin(t * 2) * 60;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    return tex;
+  }
+
+  // ========== CREATE BALLS with textures ==========
   const balls = [];
 
-  // Football (white with dark patches simulated by material)
-  const footballGeo = new THREE.IcosahedronGeometry(1.2, 1);
-  const footballMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.4, metalness: 0.05 });
-  const football = new THREE.Mesh(footballGeo, footballMat);
-  football.position.set(-10, 8, -8);
-  scene.add(football);
-  balls.push({ mesh: football, baseY: 8, speed: 0.8, rotSpeed: 0.01 });
-
-  // Add dark pentagons to football
-  const footballWireGeo = new THREE.IcosahedronGeometry(1.22, 1);
-  const footballWireMat = new THREE.MeshBasicMaterial({ color: 0x222222, wireframe: true });
-  const footballWire = new THREE.Mesh(footballWireGeo, footballWireMat);
-  football.add(footballWire);
-
-  // Basketball (orange)
-  const basketballGeo = new THREE.SphereGeometry(1.1, 32, 32);
-  const basketballMat = new THREE.MeshStandardMaterial({ color: 0xFF6B2B, roughness: 0.6, metalness: 0.05 });
-  const basketball = new THREE.Mesh(basketballGeo, basketballMat);
-  basketball.position.set(12, 10, -5);
-  scene.add(basketball);
-  balls.push({ mesh: basketball, baseY: 10, speed: 1.0, rotSpeed: 0.015 });
-
-  // Basketball seam lines
-  const seamMat = new THREE.LineBasicMaterial({ color: 0x333333 });
-  // Horizontal seam
-  const hSeamPts = [];
-  for (let i = 0; i <= 64; i++) {
-    const angle = (i / 64) * Math.PI * 2;
-    hSeamPts.push(new THREE.Vector3(Math.cos(angle) * 1.12, 0, Math.sin(angle) * 1.12));
-  }
-  basketball.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(hSeamPts), seamMat));
-  // Vertical seam
-  const vSeamPts = [];
-  for (let i = 0; i <= 64; i++) {
-    const angle = (i / 64) * Math.PI * 2;
-    vSeamPts.push(new THREE.Vector3(0, Math.cos(angle) * 1.12, Math.sin(angle) * 1.12));
-  }
-  basketball.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(vSeamPts), seamMat));
-
-  // Tennis ball (yellow-green)
-  const tennisGeo = new THREE.SphereGeometry(0.7, 32, 32);
-  const tennisMat = new THREE.MeshStandardMaterial({ color: 0xCCFF00, roughness: 0.8, metalness: 0.0 });
-  const tennis = new THREE.Mesh(tennisGeo, tennisMat);
-  tennis.position.set(5, 6, 8);
-  scene.add(tennis);
-  balls.push({ mesh: tennis, baseY: 6, speed: 1.2, rotSpeed: 0.02 });
-
-  // Tennis seam
-  const tSeamPts = [];
-  for (let i = 0; i <= 64; i++) {
-    const angle = (i / 64) * Math.PI * 2;
-    const wobble = Math.sin(angle * 2) * 0.1;
-    tSeamPts.push(new THREE.Vector3(Math.cos(angle) * (0.72 + wobble), Math.sin(angle) * 0.72, wobble * 2));
-  }
-  const tSeamMat = new THREE.LineBasicMaterial({ color: 0xffffff });
-  tennis.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(tSeamPts), tSeamMat));
-
-  // Clouds
-  const clouds = [];
-  const cloudMat = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    transparent: true,
-    opacity: 0.5,
-    side: THREE.DoubleSide,
-    depthWrite: false,
+  // FOOTBALL
+  const fbTex = createFootballTexture();
+  const fbGeo = new THREE.SphereGeometry(2.8, 48, 48);
+  const fbMat = new THREE.MeshStandardMaterial({ 
+    map: fbTex, roughness: 0.4, metalness: 0.05 
   });
+  const football = new THREE.Mesh(fbGeo, fbMat);
+  football.position.set(-12, 4, 5);
+  scene.add(football);
+  balls.push({ mesh: football, basePos: { x: -12, y: 4, z: 5 }, speed: 0.5, phase: 0 });
 
-  for (let i = 0; i < 8; i++) {
-    const cw = 8 + Math.random() * 12;
-    const ch = 3 + Math.random() * 4;
-    const cloudGeo = new THREE.PlaneGeometry(cw, ch);
-    const cloud = new THREE.Mesh(cloudGeo, cloudMat.clone());
-    cloud.material.opacity = 0.2 + Math.random() * 0.35;
-    cloud.position.set(
-      (Math.random() - 0.5) * 100,
-      25 + Math.random() * 15,
-      -20 + Math.random() * -30
-    );
-    cloud.rotation.x = -Math.PI * 0.1;
-    scene.add(cloud);
-    clouds.push({ mesh: cloud, speed: 0.5 + Math.random() * 1.0 });
+  // BASKETBALL
+  const bbTex = createBasketballTexture();
+  const bbGeo = new THREE.SphereGeometry(2.6, 48, 48);
+  const bbMat = new THREE.MeshStandardMaterial({ 
+    map: bbTex, roughness: 0.7, metalness: 0.0 
+  });
+  const basketball = new THREE.Mesh(bbGeo, bbMat);
+  basketball.position.set(10, -2, 0);
+  scene.add(basketball);
+  balls.push({ mesh: basketball, basePos: { x: 10, y: -2, z: 0 }, speed: 0.7, phase: 2 });
+
+  // TENNIS BALL
+  const tbTex = createTennisBallTexture();
+  const tbGeo = new THREE.SphereGeometry(1.6, 48, 48);
+  const tbMat = new THREE.MeshStandardMaterial({ 
+    map: tbTex, roughness: 0.85, metalness: 0.0 
+  });
+  const tennis = new THREE.Mesh(tbGeo, tbMat);
+  tennis.position.set(3, 7, -3);
+  scene.add(tennis);
+  balls.push({ mesh: tennis, basePos: { x: 3, y: 7, z: -3 }, speed: 0.9, phase: 4 });
+
+  // ========== FLOATING PARTICLES (sparkle in sunlight) ==========
+  const particleCount = 60;
+  const pGeo = new THREE.BufferGeometry();
+  const pPositions = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount; i++) {
+    pPositions[i * 3] = (Math.random() - 0.5) * 40;
+    pPositions[i * 3 + 1] = (Math.random() - 0.5) * 25;
+    pPositions[i * 3 + 2] = (Math.random() - 0.5) * 20;
   }
+  pGeo.setAttribute('position', new THREE.Float32BufferAttribute(pPositions, 3));
+  const pMat = new THREE.PointsMaterial({ 
+    color: 0xffffff, size: 0.12, transparent: true, opacity: 0.5 
+  });
+  scene.add(new THREE.Points(pGeo, pMat));
 
-  // Animation state
+  // ========== ANIMATION ==========
   let animationId;
   const clock = new THREE.Clock();
 
   function animate() {
     animationId = requestAnimationFrame(animate);
-    const elapsed = clock.getElapsedTime();
+    const t = clock.getElapsedTime();
 
-    // Float & rotate balls
     balls.forEach((b) => {
-      b.mesh.position.y = b.baseY + Math.sin(elapsed * b.speed) * 1.5;
-      b.mesh.rotation.x += b.rotSpeed;
-      b.mesh.rotation.y += b.rotSpeed * 0.7;
+      // Gentle floating
+      b.mesh.position.y = b.basePos.y + Math.sin(t * b.speed + b.phase) * 1.8;
+      b.mesh.position.x = b.basePos.x + Math.sin(t * b.speed * 0.5 + b.phase) * 0.8;
+      // Slow rotation
+      b.mesh.rotation.x += 0.003;
+      b.mesh.rotation.y += 0.005;
     });
 
-    // Drift clouds
-    clouds.forEach((c) => {
-      c.mesh.position.x += c.speed * 0.005;
-      if (c.mesh.position.x > 60) c.mesh.position.x = -60;
-    });
+    // Particles drift
+    const pp = pGeo.attributes.position.array;
+    for (let i = 0; i < particleCount; i++) {
+      pp[i * 3 + 1] += Math.sin(t + i) * 0.003;
+    }
+    pGeo.attributes.position.needsUpdate = true;
 
     renderer.render(scene, camera);
   }
   animate();
 
-  // GSAP ScrollTrigger — camera moves forward into field on scroll
-  gsap.to(camera.position, {
-    z: 10,
-    y: 5,
-    scrollTrigger: {
-      trigger: canvasContainer,
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 1.5,
-    },
-  });
-
-  // Cloud parallax on scroll
-  clouds.forEach((c, i) => {
-    gsap.to(c.mesh.position, {
-      x: `+=${8 + i * 3}`,
+  // ========== GSAP scroll — balls drift upward and out ==========
+  balls.forEach((b, i) => {
+    gsap.to(b.mesh.position, {
+      y: b.basePos.y + 12,
+      z: b.basePos.z - 8,
+      scrollTrigger: {
+        trigger: canvasContainer,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 2,
+      },
+    });
+    gsap.to(b.mesh.rotation, {
+      x: Math.PI * 2,
+      y: Math.PI * 3,
       scrollTrigger: {
         trigger: canvasContainer,
         start: 'top top',
@@ -236,24 +315,19 @@ function init3DScene(canvasContainer) {
     });
   });
 
-  // Handle resize
+  // Resize
   function onResize() {
-    const w = canvasContainer.clientWidth;
-    const h = canvasContainer.clientHeight;
-    camera.aspect = w / h;
+    camera.aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
+    renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
   }
   window.addEventListener('resize', onResize);
 
-  // Return cleanup
   return () => {
     cancelAnimationFrame(animationId);
     window.removeEventListener('resize', onResize);
     renderer.dispose();
-    if (renderer.domElement && renderer.domElement.parentNode) {
-      renderer.domElement.parentNode.removeChild(renderer.domElement);
-    }
+    if (renderer.domElement?.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
     ScrollTrigger.getAll().forEach(t => t.kill());
   };
 }
@@ -263,17 +337,12 @@ export default function Home() {
 
   useEffect(() => {
     let cleanup = null;
-    // Delay init so DOM is ready and scripts loaded
     const timer = setTimeout(() => {
       if (canvasRef.current) {
-        cleanup = init3DScene(canvasRef.current);
+        cleanup = init3DOverlay(canvasRef.current);
       }
-    }, 100);
-
-    return () => {
-      clearTimeout(timer);
-      if (cleanup) cleanup();
-    };
+    }, 200);
+    return () => { clearTimeout(timer); if (cleanup) cleanup(); };
   }, []);
 
   const stats = [
@@ -294,8 +363,9 @@ export default function Home() {
 
   return (
     <div className="home-page">
-      {/* Hero Section with 3D Background */}
+      {/* Hero Section — real photo bg + 3D ball overlay */}
       <section className="hero" id="hero-section">
+        <div className="hero-photo-bg" />
         <div className="hero-3d-canvas" ref={canvasRef} />
         <div className="hero-overlay" />
         <div className="container hero-content">
@@ -316,7 +386,7 @@ export default function Home() {
               <Link to="/booking" className="btn btn-primary btn-lg">
                 Booking Sekarang <ArrowRight size={18} />
               </Link>
-              <Link to="/search" className="btn btn-secondary btn-lg">
+              <Link to="/search" className="btn btn-secondary btn-lg hero-btn-secondary">
                 Cari Lapangan
               </Link>
             </div>

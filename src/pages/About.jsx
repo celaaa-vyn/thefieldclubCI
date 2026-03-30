@@ -4,7 +4,7 @@ import './About.css';
 export default function About() {
   const team = [
     { name: 'Jonathan Davin', role: 'Founder & CEO', emoji: '👨‍💼' },
-    { name: 'Arnoldus Jovan', role: 'CMO', emoji: '👩🏻‍🍼' },
+    { name: 'Arnoldus Jovan', role: 'CMO', emoji: '👲🏻' },
     { name: 'Kellvin', role: 'CTO', emoji: '👨‍💻' },
     { name: 'Michael Michelin', role: 'CFO', emoji: '👩‍🎨' },
   ];
