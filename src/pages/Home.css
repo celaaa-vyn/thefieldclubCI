@@ -1,6 +1,6 @@
 /* === HOME PAGE — Bright Outdoor Theme === */
 
-/* Hero */
+/* Hero — tall for scroll journey */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -10,23 +10,41 @@
   overflow: hidden;
 }
 
-/* Real photo background — beautiful outdoor sports field */
-.hero-photo-bg {
+/* SKY layer — beautiful blue sky with clouds, fills top portion */
+.hero-sky {
   position: absolute;
-  inset: 0;
+  top: -20%;
+  left: 0;
+  right: 0;
+  height: 140%;
   z-index: 0;
-  background: 
-    url('https://images.unsplash.com/photo-1556056504-5c7696c4c28d?w=1920&q=80&auto=format')
-    center center / cover no-repeat;
-  transform: scale(1.05);
+  background:
+    url('https://images.unsplash.com/photo-1601297183305-6df142704ea2?w=1920&q=80&auto=format')
+    center 30% / cover no-repeat;
   will-change: transform;
 }
 
-/* 3D canvas overlay — transparent, shows only floating balls */
+/* FIELD layer — sports field, overlay blending into the sky */
+.hero-field {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 65%;
+  z-index: 1;
+  background:
+    url('https://images.unsplash.com/photo-1556056504-5c7696c4c28d?w=1920&q=80&auto=format')
+    center bottom / cover no-repeat;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 35%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 35%);
+  will-change: transform;
+}
+
+/* 3D canvas overlay — transparent, balls float between sky and field */
 .hero-3d-canvas {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 3;
   pointer-events: none;
 }
 
@@ -36,20 +54,26 @@
   height: 100% !important;
 }
 
-/* Gradient overlay for text readability */
+/* Gradient overlay for text readability + bottom fade to white */
 .hero-overlay {
   position: absolute;
   inset: 0;
-  z-index: 1;
-  background: 
-    linear-gradient(135deg, rgba(0, 30, 10, 0.55) 0%, rgba(0, 20, 5, 0.3) 50%, rgba(0, 10, 0, 0.5) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.0) 40%, rgba(0, 0, 0, 0.1) 70%, rgba(250, 251, 254, 0.95) 95%, rgba(250, 251, 254, 1) 100%);
+  z-index: 2;
+  background:
+    linear-gradient(180deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 15, 5, 0.25) 40%,
+      rgba(0, 10, 0, 0.45) 65%,
+      rgba(0, 10, 0, 0.5) 80%,
+      rgba(250, 251, 254, 0.9) 95%,
+      rgba(250, 251, 254, 1) 100%
+    );
   pointer-events: none;
 }
 
 .hero-content {
   position: relative;
-  z-index: 3;
+  z-index: 4;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 64px;

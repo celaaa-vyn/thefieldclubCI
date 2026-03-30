@@ -4,11 +4,7 @@ import { Search, Calendar, CreditCard, Star, ArrowRight, ChevronRight, Users, Ma
 import { sports, venues, reviews } from '../data/mockData';
 import './Home.css';
 
-/* ======================================================
-   3D FLOATING BALLS — on a transparent canvas overlay
-   Uses procedurally generated textures for realism
-====================================================== */
-function init3DOverlay(canvasContainer) {
+function initHero3D(canvasEl) {
   const THREE = window.THREE;
   const gsap = window.gsap;
   const ScrollTrigger = window.ScrollTrigger;
@@ -16,315 +12,368 @@ function init3DOverlay(canvasContainer) {
   gsap.registerPlugin(ScrollTrigger);
 
   const scene = new THREE.Scene();
-
-  const camera = new THREE.PerspectiveCamera(50, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 500);
-  camera.position.set(0, 0, 30);
+  const camera = new THREE.PerspectiveCamera(
+    50,
+    canvasEl.clientWidth / canvasEl.clientHeight,
+    0.1, 500
+  );
+  camera.position.set(0, 0, 28);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+  renderer.setSize(canvasEl.clientWidth, canvasEl.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.4;
-  renderer.setClearColor(0x000000, 0); // Fully transparent
-  canvasContainer.appendChild(renderer.domElement);
+  renderer.toneMappingExposure = 1.3;
+  canvasEl.appendChild(renderer.domElement);
 
-  // ========== LIGHTING (like outdoor sunlight) ==========
-  const sunLight = new THREE.DirectionalLight(0xFFF5E0, 3.0);
-  sunLight.position.set(5, 10, 8);
-  scene.add(sunLight);
+  // ─── LIGHTING ───
+  const mainLight = new THREE.DirectionalLight(0xFFF5E0, 2.5);
+  mainLight.position.set(8, 15, 10);
+  mainLight.castShadow = true;
+  mainLight.shadow.mapSize.width = 1024;
+  mainLight.shadow.mapSize.height = 1024;
+  mainLight.shadow.camera.near = 0.5;
+  mainLight.shadow.camera.far = 60;
+  mainLight.shadow.camera.left = -20;
+  mainLight.shadow.camera.right = 20;
+  mainLight.shadow.camera.top = 20;
+  mainLight.shadow.camera.bottom = -20;
+  mainLight.shadow.radius = 8;
+  mainLight.shadow.bias = -0.002;
+  scene.add(mainLight);
 
-  const fillLight = new THREE.DirectionalLight(0xA0C4FF, 0.8);
-  fillLight.position.set(-5, 2, -3);
-  scene.add(fillLight);
+  const rimLight = new THREE.DirectionalLight(0xFFD0A0, 0.8);
+  rimLight.position.set(-5, 8, -5);
+  scene.add(rimLight);
 
-  const ambientLight = new THREE.AmbientLight(0x87CEEB, 0.6);
+  const ambientLight = new THREE.AmbientLight(0x8EC8F0, 0.6);
   scene.add(ambientLight);
 
-  const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x4CAF50, 0.5);
+  const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x4CAF50, 0.4);
   scene.add(hemiLight);
 
-  // ========== GENERATE TEXTURES VIA CANVAS ==========
+  // ─── SHADOW RECEIVER PLANE (invisible, just catches shadows) ───
+  const shadowPlaneGeo = new THREE.PlaneGeometry(50, 50);
+  const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.25 });
+  const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
+  shadowPlane.rotation.x = -Math.PI / 2;
+  shadowPlane.position.y = -8;
+  shadowPlane.receiveShadow = true;
+  scene.add(shadowPlane);
 
-  function createFootballTexture() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 256;
-    const ctx = canvas.getContext('2d');
-    
-    // White base
-    ctx.fillStyle = '#F8F8F8';
-    ctx.fillRect(0, 0, 512, 256);
-    
-    // Draw pentagon patterns (classic football look)
-    const pentagonPositions = [
-      [128, 64], [384, 64], [64, 160], [256, 128], [448, 160],
-      [192, 192], [320, 192], [128, 230], [384, 230], [256, 30],
-      [50, 60], [462, 60], [256, 240]
+  // ─── TEXTURE GENERATION ───
+  function generateFootballTexture() {
+    const c = document.createElement('canvas');
+    c.width = 1024; c.height = 512;
+    const ctx = c.getContext('2d');
+
+    // White leather base
+    const bg = ctx.createRadialGradient(512, 256, 0, 512, 256, 512);
+    bg.addColorStop(0, '#FAFAFA');
+    bg.addColorStop(1, '#E8E8E8');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, 1024, 512);
+
+    // Subtle leather grain
+    for (let i = 0; i < 5000; i++) {
+      ctx.fillStyle = `rgba(200,200,200,${Math.random() * 0.15})`;
+      ctx.fillRect(Math.random()*1024, Math.random()*512, 2 + Math.random()*2, 1);
+    }
+
+    // Black pentagons
+    const pentagons = [
+      [170, 85], [512, 60], [854, 85], [85, 256], [340, 220],
+      [680, 220], [940, 256], [170, 427], [512, 452], [854, 427],
+      [512, 256], [256, 380], [768, 380], [256, 130], [768, 130]
     ];
     
-    ctx.fillStyle = '#1A1A1A';
-    pentagonPositions.forEach(([px, py]) => {
+    pentagons.forEach(([px, py]) => {
+      ctx.fillStyle = '#1A1A1A';
       ctx.beginPath();
       for (let i = 0; i < 5; i++) {
-        const angle = (i * 72 - 90) * Math.PI / 180;
-        const r = 22;
-        const x = px + r * Math.cos(angle);
-        const y = py + r * Math.sin(angle);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        const a = (i * 72 - 90) * Math.PI / 180;
+        const r = 36;
+        const x = px + r * Math.cos(a);
+        const y = py + r * Math.sin(a);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       }
       ctx.closePath();
       ctx.fill();
-    });
-    
-    // Seam lines connecting pentagons
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = 1.5;
-    pentagonPositions.forEach(([px, py]) => {
+
+      // Connecting seams from each vertex
+      ctx.strokeStyle = '#444';
+      ctx.lineWidth = 2;
       for (let i = 0; i < 5; i++) {
-        const angle = (i * 72 - 90) * Math.PI / 180;
-        const r = 22;
+        const a = (i * 72 - 90) * Math.PI / 180;
+        const r = 36;
         ctx.beginPath();
-        ctx.moveTo(px + r * Math.cos(angle), py + r * Math.sin(angle));
-        ctx.lineTo(px + (r + 16) * Math.cos(angle), py + (r + 16) * Math.sin(angle));
+        ctx.moveTo(px + r * Math.cos(a), py + r * Math.sin(a));
+        ctx.lineTo(px + (r + 28) * Math.cos(a), py + (r + 28) * Math.sin(a));
         ctx.stroke();
       }
     });
-    
-    const tex = new THREE.CanvasTexture(canvas);
+
+    const tex = new THREE.CanvasTexture(c);
     tex.wrapS = THREE.RepeatWrapping;
     tex.wrapT = THREE.RepeatWrapping;
     return tex;
   }
 
-  function createBasketballTexture() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 256;
-    const ctx = canvas.getContext('2d');
-    
-    // Orange leather base with subtle grain
-    const gradient = ctx.createLinearGradient(0, 0, 512, 256);
-    gradient.addColorStop(0, '#D4581C');
-    gradient.addColorStop(0.3, '#E8651E');
-    gradient.addColorStop(0.5, '#F07020');
-    gradient.addColorStop(0.7, '#E8651E');
-    gradient.addColorStop(1, '#D4581C');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 512, 256);
-    
-    // Add leather grain texture
-    for (let i = 0; i < 3000; i++) {
-      const x = Math.random() * 512;
-      const y = Math.random() * 256;
-      ctx.fillStyle = `rgba(${Math.random() > 0.5 ? 180 : 100}, ${Math.random() > 0.5 ? 60 : 40}, ${Math.random() > 0.5 ? 15 : 5}, 0.15)`;
-      ctx.fillRect(x, y, 2, 1);
-    }
-    
-    // Main seam lines (black, thick)
-    ctx.strokeStyle = '#1A1A1A';
-    ctx.lineWidth = 3.5;
-    
-    // Horizontal seam
-    ctx.beginPath();
-    ctx.moveTo(0, 128);
-    ctx.lineTo(512, 128);
-    ctx.stroke();
-    
-    // Vertical seam
-    ctx.beginPath();
-    ctx.moveTo(256, 0);
-    ctx.lineTo(256, 256);
-    ctx.stroke();
-    
-    // Curved side seams
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(0, 128);
-    for (let x = 0; x <= 512; x += 2) {
-      const y = 128 + Math.sin((x / 512) * Math.PI * 2) * 80;
-      ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-    
-    ctx.beginPath();
-    ctx.moveTo(0, 128);
-    for (let x = 0; x <= 512; x += 2) {
-      const y = 128 - Math.sin((x / 512) * Math.PI * 2) * 80;
-      ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-    
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.wrapS = THREE.RepeatWrapping;
-    tex.wrapT = THREE.RepeatWrapping;
-    return tex;
-  }
+  function generateBasketballTexture() {
+    const c = document.createElement('canvas');
+    c.width = 1024; c.height = 512;
+    const ctx = c.getContext('2d');
 
-  function createTennisBallTexture() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 256;
-    const ctx = canvas.getContext('2d');
-    
-    // Yellow-green felt base
-    ctx.fillStyle = '#C8D820';
-    ctx.fillRect(0, 0, 512, 256);
-    
-    // Add fuzzy texture
-    for (let i = 0; i < 8000; i++) {
-      const x = Math.random() * 512;
-      const y = Math.random() * 256;
-      const brightness = Math.random();
-      ctx.fillStyle = `rgba(${170 + brightness * 60}, ${195 + brightness * 40}, ${brightness > 0.5 ? 20 : 0}, 0.12)`;
+    // Leather gradient
+    const grad = ctx.createLinearGradient(0, 0, 1024, 512);
+    grad.addColorStop(0, '#C04E12');
+    grad.addColorStop(0.25, '#E06518');
+    grad.addColorStop(0.5, '#F07020');
+    grad.addColorStop(0.75, '#E06518');
+    grad.addColorStop(1, '#C04E12');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 1024, 512);
+
+    // Pebble grain texture
+    for (let i = 0; i < 12000; i++) {
+      const x = Math.random() * 1024;
+      const y = Math.random() * 512;
+      const bright = Math.random();
+      ctx.fillStyle = `rgba(${130 + bright * 60}, ${50 + bright * 30}, ${bright * 15}, 0.12)`;
       ctx.beginPath();
-      ctx.arc(x, y, 1, 0, Math.PI * 2);
+      ctx.arc(x, y, 0.5 + Math.random() * 1.5, 0, Math.PI * 2);
       ctx.fill();
     }
-    
-    // Characteristic curved white seam
-    ctx.strokeStyle = '#FFFFFF';
+
+    // Black seam lines
+    ctx.strokeStyle = '#111';
+    ctx.lineWidth = 5;
+    ctx.shadowColor = 'rgba(0,0,0,0.3)';
+    ctx.shadowBlur = 3;
+
+    // Horizontal
+    ctx.beginPath();
+    ctx.moveTo(0, 256); ctx.lineTo(1024, 256);
+    ctx.stroke();
+
+    // Vertical
+    ctx.beginPath();
+    ctx.moveTo(512, 0); ctx.lineTo(512, 512);
+    ctx.stroke();
+
+    // Curved seams
     ctx.lineWidth = 4;
-    ctx.shadowColor = 'rgba(0,0,0,0.2)';
-    ctx.shadowBlur = 2;
-    
+    // Curve 1
     ctx.beginPath();
-    for (let x = 0; x <= 512; x += 2) {
-      const t = (x / 512) * Math.PI * 2;
-      const y = 128 + Math.sin(t * 2) * 60;
-      if (x === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+    for (let x = 0; x <= 1024; x += 3) {
+      const y = 256 + Math.sin((x / 1024) * Math.PI * 2) * 140;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.stroke();
-    
+    // Curve 2
     ctx.beginPath();
-    for (let x = 0; x <= 512; x += 2) {
-      const t = (x / 512) * Math.PI * 2;
-      const y = 128 - Math.sin(t * 2) * 60;
-      if (x === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+    for (let x = 0; x <= 1024; x += 3) {
+      const y = 256 - Math.sin((x / 1024) * Math.PI * 2) * 140;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.stroke();
-    
-    const tex = new THREE.CanvasTexture(canvas);
+
+    ctx.shadowBlur = 0;
+    const tex = new THREE.CanvasTexture(c);
     tex.wrapS = THREE.RepeatWrapping;
     tex.wrapT = THREE.RepeatWrapping;
     return tex;
   }
 
-  // ========== CREATE BALLS with textures ==========
-  const balls = [];
+  function generateTennisTexture() {
+    const c = document.createElement('canvas');
+    c.width = 1024; c.height = 512;
+    const ctx = c.getContext('2d');
 
-  // FOOTBALL
-  const fbTex = createFootballTexture();
-  const fbGeo = new THREE.SphereGeometry(2.8, 48, 48);
-  const fbMat = new THREE.MeshStandardMaterial({ 
-    map: fbTex, roughness: 0.4, metalness: 0.05 
-  });
-  const football = new THREE.Mesh(fbGeo, fbMat);
-  football.position.set(-12, 4, 5);
-  scene.add(football);
-  balls.push({ mesh: football, basePos: { x: -12, y: 4, z: 5 }, speed: 0.5, phase: 0 });
+    // Yellow-green felt
+    ctx.fillStyle = '#C5D616';
+    ctx.fillRect(0, 0, 1024, 512);
 
-  // BASKETBALL
-  const bbTex = createBasketballTexture();
-  const bbGeo = new THREE.SphereGeometry(2.6, 48, 48);
-  const bbMat = new THREE.MeshStandardMaterial({ 
-    map: bbTex, roughness: 0.7, metalness: 0.0 
-  });
-  const basketball = new THREE.Mesh(bbGeo, bbMat);
-  basketball.position.set(10, -2, 0);
-  scene.add(basketball);
-  balls.push({ mesh: basketball, basePos: { x: 10, y: -2, z: 0 }, speed: 0.7, phase: 2 });
+    // Felt fuzz
+    for (let i = 0; i < 20000; i++) {
+      const bright = Math.random();
+      ctx.fillStyle = `rgba(${170 + bright * 50}, ${190 + bright * 30}, ${bright * 20}, 0.08)`;
+      ctx.beginPath();
+      ctx.arc(Math.random() * 1024, Math.random() * 512, 1 + Math.random(), 0, Math.PI * 2);
+      ctx.fill();
+    }
 
-  // TENNIS BALL
-  const tbTex = createTennisBallTexture();
-  const tbGeo = new THREE.SphereGeometry(1.6, 48, 48);
-  const tbMat = new THREE.MeshStandardMaterial({ 
-    map: tbTex, roughness: 0.85, metalness: 0.0 
-  });
-  const tennis = new THREE.Mesh(tbGeo, tbMat);
-  tennis.position.set(3, 7, -3);
-  scene.add(tennis);
-  balls.push({ mesh: tennis, basePos: { x: 3, y: 7, z: -3 }, speed: 0.9, phase: 4 });
+    // White seam curves
+    ctx.strokeStyle = '#FFFFFFDD';
+    ctx.lineWidth = 6;
+    ctx.shadowColor = 'rgba(0,0,0,0.15)';
+    ctx.shadowBlur = 4;
+    
+    ctx.beginPath();
+    for (let x = 0; x <= 1024; x += 3) {
+      const y = 256 + Math.sin((x / 1024) * Math.PI * 4) * 100;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
 
-  // ========== FLOATING PARTICLES (sparkle in sunlight) ==========
-  const particleCount = 60;
-  const pGeo = new THREE.BufferGeometry();
-  const pPositions = new Float32Array(particleCount * 3);
-  for (let i = 0; i < particleCount; i++) {
-    pPositions[i * 3] = (Math.random() - 0.5) * 40;
-    pPositions[i * 3 + 1] = (Math.random() - 0.5) * 25;
-    pPositions[i * 3 + 2] = (Math.random() - 0.5) * 20;
+    ctx.beginPath();
+    for (let x = 0; x <= 1024; x += 3) {
+      const y = 256 - Math.sin((x / 1024) * Math.PI * 4) * 100;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    const tex = new THREE.CanvasTexture(c);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    return tex;
   }
-  pGeo.setAttribute('position', new THREE.Float32BufferAttribute(pPositions, 3));
-  const pMat = new THREE.PointsMaterial({ 
-    color: 0xffffff, size: 0.12, transparent: true, opacity: 0.5 
-  });
-  scene.add(new THREE.Points(pGeo, pMat));
 
-  // ========== ANIMATION ==========
-  let animationId;
+  // ─── CREATE BALLS ───
+  const balls = [];
+  const ballGeo = new THREE.SphereGeometry(1, 64, 64);
+
+  // Football
+  const fb = new THREE.Mesh(ballGeo.clone(), new THREE.MeshStandardMaterial({
+    map: generateFootballTexture(), roughness: 0.35, metalness: 0.05,
+    envMapIntensity: 0.8,
+  }));
+  fb.scale.setScalar(2.2);
+  fb.castShadow = true;
+  fb.position.set(-10, 5, 2);
+  scene.add(fb);
+  balls.push({ mesh: fb, origin: { x: -10, y: 5, z: 2 }, phase: 0 });
+
+  // Basketball
+  const bb = new THREE.Mesh(ballGeo.clone(), new THREE.MeshStandardMaterial({
+    map: generateBasketballTexture(), roughness: 0.65, metalness: 0.0,
+    envMapIntensity: 0.5,
+  }));
+  bb.scale.setScalar(2.0);
+  bb.castShadow = true;
+  bb.position.set(11, -1, -1);
+  scene.add(bb);
+  balls.push({ mesh: bb, origin: { x: 11, y: -1, z: -1 }, phase: 2.5 });
+
+  // Tennis ball
+  const tb = new THREE.Mesh(ballGeo.clone(), new THREE.MeshStandardMaterial({
+    map: generateTennisTexture(), roughness: 0.88, metalness: 0.0,
+    envMapIntensity: 0.3,
+  }));
+  tb.scale.setScalar(1.3);
+  tb.castShadow = true;
+  tb.position.set(3, 8, -2);
+  scene.add(tb);
+  balls.push({ mesh: tb, origin: { x: 3, y: 8, z: -2 }, phase: 4.8 });
+
+  // ─── SOFT DROP SHADOWS (circles beneath each ball) ───
+  const shadowGeo = new THREE.CircleGeometry(1, 32);
+  const shadowMat = new THREE.MeshBasicMaterial({
+    color: 0x000000, transparent: true, opacity: 0.18,
+    depthWrite: false,
+  });
+
+  const dropShadows = [];
+  balls.forEach(b => {
+    const shadow = new THREE.Mesh(shadowGeo.clone(), shadowMat.clone());
+    shadow.rotation.x = -Math.PI / 2;
+    shadow.position.set(b.origin.x, -8, b.origin.z);
+    shadow.scale.set(b.mesh.scale.x * 1.2, b.mesh.scale.x * 1.2, 1);
+    scene.add(shadow);
+    dropShadows.push(shadow);
+  });
+
+  // ─── ANIMATION ───
+  let animId;
   const clock = new THREE.Clock();
 
   function animate() {
-    animationId = requestAnimationFrame(animate);
+    animId = requestAnimationFrame(animate);
     const t = clock.getElapsedTime();
 
-    balls.forEach((b) => {
-      // Gentle floating
-      b.mesh.position.y = b.basePos.y + Math.sin(t * b.speed + b.phase) * 1.8;
-      b.mesh.position.x = b.basePos.x + Math.sin(t * b.speed * 0.5 + b.phase) * 0.8;
-      // Slow rotation
-      b.mesh.rotation.x += 0.003;
-      b.mesh.rotation.y += 0.005;
-    });
+    balls.forEach((b, i) => {
+      const p = b.phase;
+      // Multi-frequency floating — more organic
+      const floatY = Math.sin(t * 0.4 + p) * 1.5
+                   + Math.sin(t * 0.7 + p * 1.3) * 0.6
+                   + Math.sin(t * 1.1 + p * 0.7) * 0.3;
+      const driftX = Math.sin(t * 0.25 + p * 2) * 0.8
+                   + Math.sin(t * 0.55 + p) * 0.3;
+      const driftZ = Math.cos(t * 0.3 + p * 1.5) * 0.4;
 
-    // Particles drift
-    const pp = pGeo.attributes.position.array;
-    for (let i = 0; i < particleCount; i++) {
-      pp[i * 3 + 1] += Math.sin(t + i) * 0.003;
-    }
-    pGeo.attributes.position.needsUpdate = true;
+      b.mesh.position.y = b.origin.y + floatY;
+      b.mesh.position.x = b.origin.x + driftX;
+      b.mesh.position.z = b.origin.z + driftZ;
+
+      // Organic slow rotation (tumble)
+      b.mesh.rotation.x += Math.sin(t * 0.3 + p) * 0.003;
+      b.mesh.rotation.y += 0.004;
+      b.mesh.rotation.z += Math.cos(t * 0.2 + p) * 0.002;
+
+      // Drop shadow follows ball, gets lighter when ball is higher
+      const sh = dropShadows[i];
+      sh.position.x = b.mesh.position.x;
+      sh.position.z = b.mesh.position.z + 2; // offset for perspective
+      const heightAboveGround = b.mesh.position.y - (-8);
+      const shadowScale = b.mesh.scale.x * (1 + heightAboveGround * 0.04);
+      sh.scale.set(shadowScale, shadowScale * 0.6, 1);
+      sh.material.opacity = Math.max(0.04, 0.2 - heightAboveGround * 0.008);
+    });
 
     renderer.render(scene, camera);
   }
   animate();
 
-  // ========== GSAP scroll — balls drift upward and out ==========
+  // ─── GSAP — balls entrance & scroll parallax ───
+  // Balls start off-screen and float in
   balls.forEach((b, i) => {
+    const startX = b.origin.x > 0 ? b.origin.x + 30 : b.origin.x - 30;
+    b.mesh.position.x = startX;
+    b.mesh.position.y = b.origin.y + 15;
+    b.mesh.material.transparent = true;
+    b.mesh.material.opacity = 0;
+
     gsap.to(b.mesh.position, {
-      y: b.basePos.y + 12,
-      z: b.basePos.z - 8,
-      scrollTrigger: {
-        trigger: canvasContainer,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 2,
-      },
+      x: b.origin.x,
+      y: b.origin.y,
+      duration: 1.8 + i * 0.3,
+      delay: 0.5 + i * 0.25,
+      ease: 'power3.out',
     });
-    gsap.to(b.mesh.rotation, {
-      x: Math.PI * 2,
-      y: Math.PI * 3,
+    gsap.to(b.mesh.material, {
+      opacity: 1,
+      duration: 1.2,
+      delay: 0.5 + i * 0.25,
+      ease: 'power2.out',
+    });
+  });
+
+  // On scroll — balls rise and spread out
+  balls.forEach((b) => {
+    gsap.to(b.mesh.position, {
+      y: `+=${10}`,
       scrollTrigger: {
-        trigger: canvasContainer,
+        trigger: canvasEl,
         start: 'top top',
         end: 'bottom top',
-        scrub: 2,
+        scrub: 2.5,
       },
     });
   });
 
   // Resize
   function onResize() {
-    camera.aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
+    camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+    renderer.setSize(canvasEl.clientWidth, canvasEl.clientHeight);
   }
   window.addEventListener('resize', onResize);
 
   return () => {
-    cancelAnimationFrame(animationId);
+    cancelAnimationFrame(animId);
     window.removeEventListener('resize', onResize);
     renderer.dispose();
     if (renderer.domElement?.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
@@ -334,15 +383,63 @@ function init3DOverlay(canvasContainer) {
 
 export default function Home() {
   const canvasRef = useRef(null);
+  const heroRef = useRef(null);
 
   useEffect(() => {
     let cleanup = null;
     const timer = setTimeout(() => {
-      if (canvasRef.current) {
-        cleanup = init3DOverlay(canvasRef.current);
-      }
-    }, 200);
+      if (canvasRef.current) cleanup = initHero3D(canvasRef.current);
+    }, 300);
     return () => { clearTimeout(timer); if (cleanup) cleanup(); };
+  }, []);
+
+  // GSAP parallax for sky → field scroll transition
+  useEffect(() => {
+    const gsap = window.gsap;
+    const ScrollTrigger = window.ScrollTrigger;
+    if (!gsap || !ScrollTrigger || !heroRef.current) return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const hero = heroRef.current;
+    const skyLayer = hero.querySelector('.hero-sky');
+    const fieldLayer = hero.querySelector('.hero-field');
+    const content = hero.querySelector('.hero-content');
+
+    if (skyLayer) {
+      gsap.to(skyLayer, {
+        yPercent: -40,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+    }
+    if (fieldLayer) {
+      gsap.to(fieldLayer, {
+        yPercent: -20,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: '30% top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+    }
+    if (content) {
+      gsap.from(content, {
+        y: 80,
+        opacity: 0,
+        duration: 1.5,
+        ease: 'power3.out',
+        delay: 0.3,
+      });
+    }
+
+    return () => ScrollTrigger.getAll().forEach(t => t.kill());
   }, []);
 
   const stats = [
@@ -363,11 +460,17 @@ export default function Home() {
 
   return (
     <div className="home-page">
-      {/* Hero Section — real photo bg + 3D ball overlay */}
-      <section className="hero" id="hero-section">
-        <div className="hero-photo-bg" />
+      {/* Hero — Sky-to-Field Parallax */}
+      <section className="hero" id="hero-section" ref={heroRef}>
+        {/* Sky layer — moves slower on scroll (parallax) */}
+        <div className="hero-sky" />
+        {/* Field layer — revealed as you scroll */}
+        <div className="hero-field" />
+        {/* 3D floating balls */}
         <div className="hero-3d-canvas" ref={canvasRef} />
+        {/* Dark gradient for text readability */}
         <div className="hero-overlay" />
+
         <div className="container hero-content">
           <div className="hero-text">
             <div className="hero-badge">
