@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MapPin, Star, Clock, Wifi, Car, Coffee, Users, ChevronLeft, ChevronRight } from 'lucide-react';
-import { venues, sports, generateSchedule, reviews } from '../data/mockData';
+import { MapPin, Star, Clock, ChevronLeft, Check } from 'lucide-react';
+import { venues, sports, generateSchedule } from '../data/mockData';
 import './CourtDetail.css';
 
 export default function CourtDetail() {
@@ -36,7 +36,8 @@ export default function CourtDetail() {
     return { day: days[d.getDay()], date: d.getDate() };
   };
 
-  const venueReviews = reviews.filter(r => r.venue === venue.name);
+  // Use venue-specific reviews embedded in venue data
+  const venueReviews = venue.reviews || [];
 
   return (
     <div className="court-detail-page">
@@ -48,22 +49,30 @@ export default function CourtDetail() {
             <div className="cd-badges">
               {venue.sports.map(s => {
                 const sp = sports.find(sp => sp.id === s);
-                return <span key={s} className="badge badge-success">{sp?.icon} {sp?.name}</span>;
+                return <span key={s} className="badge badge-success">{sp?.name}</span>;
               })}
             </div>
             <h1>{venue.name}</h1>
             <div className="cd-meta">
               <span><MapPin size={16} /> {venue.address}</span>
               <span><Star size={16} fill="#eab308" style={{color:'#eab308'}} /> {venue.rating} ({venue.reviewCount} review)</span>
-              <span><Clock size={16} /> {venue.openHour} - {venue.closeHour}</span>
+              {venue.openHour && <span><Clock size={16} /> {venue.openHour} - {venue.closeHour}</span>}
             </div>
           </div>
         </div>
 
-        {/* Venue Visual */}
+        {/* Venue Image */}
         <div className="cd-visual">
-          <div className="cd-main-img" style={{ background: `linear-gradient(135deg, ${courtSport?.color || '#00C853'}25, var(--bg-elevated))` }}>
-            <span className="cd-emoji">{courtSport?.icon || '🏟️'}</span>
+          <div
+            className="cd-main-img"
+            style={{ background: `linear-gradient(135deg, ${courtSport?.color || '#00C853'}25, var(--bg-elevated))` }}
+          >
+            <img
+              src={venue.image}
+              alt={venue.name}
+              className="cd-venue-img"
+              onError={e => { e.target.style.display = 'none'; }}
+            />
           </div>
         </div>
 
@@ -75,13 +84,13 @@ export default function CourtDetail() {
               <div className="cd-facilities">
                 {venue.facilities.map(f => (
                   <div key={f} className="facility-item">
-                    <span className="facility-check">✓</span> {f}
+                    <span className="facility-check"><Check size={14} /></span> {f}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Pilih Lapangan */}
+            {/* Pilih Lapangan — selalu 3 lapangan */}
             <div className="cd-section">
               <h3>Pilih Lapangan</h3>
               <div className="court-tabs">
@@ -92,7 +101,7 @@ export default function CourtDetail() {
                     onClick={() => { setSelectedCourt(c); setSelectedSlots([]); }}
                   >
                     <span className="ct-name">{c.name}</span>
-                    <span className="ct-price">Rp{c.price.toLocaleString('id-ID')}/jam</span>
+                    <span className="ct-price">Rp{c.price.toLocaleString('id-ID')}/{c.unit}</span>
                   </button>
                 ))}
               </div>
@@ -144,11 +153,13 @@ export default function CourtDetail() {
 
             {/* Reviews */}
             <div className="cd-section">
-              <h3>Review & Rating</h3>
+              <h3>Review &amp; Rating</h3>
               {venueReviews.length > 0 ? venueReviews.map(r => (
                 <div key={r.id} className="cd-review">
                   <div className="cd-review-header">
-                    <span className="cd-review-avatar">{r.avatar}</span>
+                    <div className="cd-review-avatar-circle">
+                      {r.user.charAt(0).toUpperCase()}
+                    </div>
                     <div>
                       <p className="cd-review-name">{r.user}</p>
                       <div className="cd-review-stars">
@@ -157,7 +168,6 @@ export default function CourtDetail() {
                         ))}
                       </div>
                     </div>
-                    <span className="cd-review-date">{r.date}</span>
                   </div>
                   <p className="cd-review-text">{r.comment}</p>
                 </div>
@@ -188,7 +198,18 @@ export default function CourtDetail() {
                     <span>Total</span>
                     <span className="bs-total-price">Rp{(selectedSlots.length * selectedCourt.price).toLocaleString('id-ID')}</span>
                   </div>
-                  <Link to="/booking" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                  <Link
+                    to="/booking"
+                    state={{
+                      venueId: venue.id,
+                      courtId: selectedCourt.id,
+                      date: selectedDate,
+                      slots: selectedSlots,
+                      sport: selectedCourt.sport,
+                    }}
+                    className="btn btn-primary"
+                    style={{ width: '100%', justifyContent: 'center' }}
+                  >
                     Lanjut Booking
                   </Link>
                 </>

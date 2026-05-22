@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Calendar, Users, MapPin, ArrowRight } from 'lucide-react';
 import { events, sports } from '../data/mockData';
+import { getSportIcon, IconPeople, IconCalendarPlus, IconChat, IconTrophy } from '../components/Icons';
 import './Events.css';
 
 export default function Events() {
@@ -19,7 +20,7 @@ export default function Events() {
             return (
               <div key={event.id} className="event-card glass-card" style={{ animationDelay: `${i * 0.1}s` }}>
                 <div className="event-banner" style={{ background: `linear-gradient(135deg, ${sport?.color || '#00C853'}30, var(--bg-elevated))` }}>
-                  <span className="event-sport-emoji">{sport?.icon || '🏟️'}</span>
+                  <span className="event-sport-emoji">{getSportIcon(sport?.icon, 40, sport?.color)}</span>
                   <span className={`badge ${event.status === 'open' ? 'badge-success' : 'badge-danger'}`} style={{ position: 'absolute', top: 12, right: 12 }}>
                     {event.status === 'open' ? 'Pendaftaran Dibuka' : 'Penuh'}
                   </span>
@@ -56,19 +57,19 @@ export default function Events() {
               <p>Kumpulkan teman-teman olahragamu dan buat event komunitas bersama. Dapatkan diskon khusus untuk booking reguler!</p>
               <div className="community-features">
                 <div className="cf-item">
-                  <span className="cf-icon">👥</span>
+                  <span className="cf-icon"><IconPeople size={22} /></span>
                   <span>Undang Pemain</span>
                 </div>
                 <div className="cf-item">
-                  <span className="cf-icon">📅</span>
+                  <span className="cf-icon"><IconCalendarPlus size={22} /></span>
                   <span>Buat Event</span>
                 </div>
                 <div className="cf-item">
-                  <span className="cf-icon">💬</span>
+                  <span className="cf-icon"><IconChat size={22} /></span>
                   <span>Chat Grup</span>
                 </div>
                 <div className="cf-item">
-                  <span className="cf-icon">🏆</span>
+                  <span className="cf-icon"><IconTrophy size={22} /></span>
                   <span>Turnamen</span>
                 </div>
               </div>

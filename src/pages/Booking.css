@@ -186,6 +186,15 @@
 .ts-time { font-weight: 600; }
 .ts-price { font-size: 0.8rem; color: var(--text-muted); }
 
+.time-slot.booked {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: var(--bg-elevated);
+  border-color: var(--border-light);
+}
+
+.time-slot.booked:hover { border-color: var(--border-light); }
+
 /* Add-On Select */
 .addon-select-grid {
   display: grid;

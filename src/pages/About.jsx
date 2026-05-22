@@ -1,12 +1,13 @@
 import { Target, Eye, Heart, Users, TrendingUp, Award } from 'lucide-react';
+import { IconUserMale, IconUserFemale } from '../components/Icons';
 import './About.css';
 
 export default function About() {
   const team = [
-    { name: 'Jonathan Davin', role: 'Founder & CEO', emoji: '👨‍💼' },
-    { name: 'Arnoldus Jovan', role: 'CMO', emoji: '👲🏻' },
-    { name: 'Kellvin', role: 'CTO', emoji: '👨‍💻' },
-    { name: 'Michael Michelin', role: 'CFO', emoji: '👩‍🎨' },
+    { name: 'Jonathan Davin', role: 'Founder & CEO', icon: <IconUserMale size={40} color="#FF6B2B" /> },
+    { name: 'Arnoldus Jovan', role: 'CMO', icon: <IconUserMale size={40} color="#3b82f6" /> },
+    { name: 'Kellvin', role: 'CTO', icon: <IconUserMale size={40} color="#8b5cf6" /> },
+    { name: 'Michael Michelin', role: 'CFO', icon: <IconUserMale size={40} color="#00C853" /> },
   ];
 
   const impacts = [
@@ -84,7 +85,7 @@ export default function About() {
           <div className="team-grid">
             {team.map((t, i) => (
               <div key={i} className="team-card glass-card" style={{ animationDelay: `${i * 0.1}s` }}>
-                <span className="team-avatar">{t.emoji}</span>
+                <span className="team-avatar">{t.icon}</span>
                 <h4>{t.name}</h4>
                 <p>{t.role}</p>
               </div>

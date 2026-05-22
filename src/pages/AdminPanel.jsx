@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Users, Building, CreditCard, BarChart3, Search } from 'lucide-react';
 import { adminStats, venues } from '../data/mockData';
+import { IconStarFull } from '../components/Icons';
 import './Dashboard.css';
 
 export default function AdminPanel() {
@@ -49,28 +50,28 @@ export default function AdminPanel() {
         {/* Overview */}
         {activeTab === 'overview' && (
           <div className="animate-fade-in">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+            <div className="admin-grid-2col">
               <div className="glass-card">
-                <h3 style={{ marginBottom: 16 }}>Pengguna Terbaru</h3>
+                <h3 className="admin-card-title">Pengguna Terbaru</h3>
                 {adminStats.recentUsers.slice(0, 3).map(u => (
-                  <div key={u.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border-color)' }}>
+                  <div key={u.id} className="admin-list-item">
                     <div>
-                      <p style={{ fontWeight: 600, fontSize: '0.9rem' }}>{u.name}</p>
-                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{u.email}</p>
+                      <p className="admin-item-name">{u.name}</p>
+                      <p className="admin-item-sub">{u.email}</p>
                     </div>
                     <span className={`badge ${u.role === 'owner' ? 'badge-warning' : 'badge-info'}`}>{u.role}</span>
                   </div>
                 ))}
               </div>
               <div className="glass-card">
-                <h3 style={{ marginBottom: 16 }}>Venue Overview</h3>
+                <h3 className="admin-card-title">Venue Overview</h3>
                 {venues.slice(0, 3).map(v => (
-                  <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border-color)' }}>
+                  <div key={v.id} className="admin-list-item">
                     <div>
-                      <p style={{ fontWeight: 600, fontSize: '0.9rem' }}>{v.name}</p>
-                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{v.location}</p>
+                      <p className="admin-item-name">{v.name}</p>
+                      <p className="admin-item-sub">{v.location}</p>
                     </div>
-                    <span style={{ color: 'var(--accent-yellow)', fontSize: '0.9rem' }}>⭐ {v.rating}</span>
+                    <span className="admin-rating"><IconStarFull size={14} /> {v.rating}</span>
                   </div>
                 ))}
               </div>
@@ -81,10 +82,10 @@ export default function AdminPanel() {
         {/* Users */}
         {activeTab === 'users' && (
           <div className="animate-fade-in">
-            <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
-              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', padding: '0 14px' }}>
-                <Search size={18} style={{ color: 'var(--text-muted)' }} />
-                <input type="text" placeholder="Cari pengguna..." style={{ background: 'none', border: 'none', color: 'var(--text-primary)', padding: '10px 0', width: '100%', fontSize: '0.9rem' }} />
+            <div className="admin-toolbar">
+              <div className="admin-search-bar">
+                <Search size={18} className="admin-search-icon" />
+                <input type="text" placeholder="Cari pengguna..." className="admin-search-input" />
               </div>
               <button className="btn btn-primary btn-sm">+ Tambah Pengguna</button>
             </div>
@@ -143,7 +144,7 @@ export default function AdminPanel() {
                     <td>{v.location}</td>
                     <td>{v.sports.join(', ')}</td>
                     <td>{v.courts.length}</td>
-                    <td><span style={{ color: 'var(--accent-yellow)' }}>⭐ {v.rating}</span></td>
+                    <td><span className="admin-rating"><IconStarFull size={14} /> {v.rating}</span></td>
                     <td><button className="btn btn-sm btn-secondary">Detail</button></td>
                   </tr>
                 ))}

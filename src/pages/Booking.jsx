@@ -1,18 +1,30 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Check, ArrowRight, ArrowLeft, CreditCard, Camera, ShoppingBag } from 'lucide-react';
 import { sports, venues, addOnServices, paymentMethods } from '../data/mockData';
+import { getSportIcon, getServiceIcon, getPaymentIcon, IconCheckCircle, IconStarFull } from '../components/Icons';
 import './Booking.css';
 
 export default function Booking() {
-  const [step, setStep] = useState(1);
-  const [selectedSport, setSelectedSport] = useState('');
+  const location = useLocation();
+  const fromCourtDetail = location.state;
+
+  const [step, setStep] = useState(fromCourtDetail ? 3 : 1);
+  const [selectedSport, setSelectedSport] = useState(fromCourtDetail?.sport || '');
   const [selectedVenue, setSelectedVenue] = useState(null);
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedSlots, setSelectedSlots] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(fromCourtDetail?.date || '');
+  const [selectedSlots, setSelectedSlots] = useState(fromCourtDetail?.slots || []);
   const [selectedAddOns, setSelectedAddOns] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState('');
   const [bookingComplete, setBookingComplete] = useState(false);
+
+  // Pre-fill venue from CourtDetail state
+  useEffect(() => {
+    if (fromCourtDetail?.venueId) {
+      const v = venues.find(venue => venue.id === fromCourtDetail.venueId);
+      if (v) setSelectedVenue(v);
+    }
+  }, [fromCourtDetail]);
 
   const steps = [
     { num: 1, label: 'Pilih Olahraga' },
@@ -25,6 +37,12 @@ export default function Booking() {
   const filteredVenues = selectedSport ? venues.filter(v => v.sports.includes(selectedSport)) : venues;
 
   const timeSlots = ['06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
+
+  // Deterministic availability based on date+venue (bukan Math.random)
+  const getSlotAvailability = (slot, venueId, date) => {
+    const seed = (venueId || 1) * 13 + slot.charCodeAt(1) + (date ? new Date(date).getDate() : 1);
+    return (seed * 7) % 10 >= 3; // ~70% tersedia
+  };
 
   const toggleSlot = (slot) => {
     setSelectedSlots(prev => prev.includes(slot) ? prev.filter(s => s !== slot) : [...prev, slot]);
@@ -55,7 +73,7 @@ export default function Booking() {
       <div className="booking-page">
         <div className="container">
           <div className="booking-success">
-            <div className="success-icon">✅</div>
+            <div className="success-icon"><IconCheckCircle size={64} /></div>
             <h2>Booking Berhasil!</h2>
             <p>Pesanan Anda telah dikonfirmasi. Detail booking telah dikirim ke email Anda.</p>
             <div className="success-details glass-card">
@@ -106,7 +124,7 @@ export default function Booking() {
                     className={`sport-select-card ${selectedSport === s.id ? 'selected' : ''}`}
                     onClick={() => { setSelectedSport(s.id); setSelectedVenue(null); }}
                   >
-                    <span className="ssc-icon">{s.icon}</span>
+                    <span className="ssc-icon">{getSportIcon(s.icon, 32, s.color)}</span>
                     <span className="ssc-name">{s.name}</span>
                     <span className="ssc-price">{s.priceRange}</span>
                   </button>
@@ -125,7 +143,7 @@ export default function Booking() {
                       >
                         <h4>{v.name}</h4>
                         <p>{v.location}</p>
-                        <span className="vsc-rating">⭐ {v.rating}</span>
+                        <span className="vsc-rating"><IconStarFull size={14} /> {v.rating}</span>
                       </button>
                     ))}
                   </div>
@@ -155,15 +173,18 @@ export default function Booking() {
               <p className="step-note">Pilih satu atau lebih slot waktu</p>
               <div className="time-slot-grid">
                 {timeSlots.map(slot => {
-                  const isBooked = Math.random() > 0.7; // simulasi
+                  const isAvailable = getSlotAvailability(slot, selectedVenue?.id, selectedDate);
                   return (
                     <button
                       key={slot}
-                      className={`time-slot ${selectedSlots.includes(slot) ? 'selected' : ''} ${isBooked ? '' : ''}`}
-                      onClick={() => toggleSlot(slot)}
+                      className={`time-slot ${selectedSlots.includes(slot) ? 'selected' : ''} ${!isAvailable ? 'booked' : ''}`}
+                      onClick={() => isAvailable && toggleSlot(slot)}
+                      disabled={!isAvailable}
                     >
                       <span className="ts-time">{slot}</span>
-                      <span className="ts-price">Rp{(selectedVenue?.courts[0]?.price || 0).toLocaleString('id-ID')}</span>
+                      <span className="ts-price">
+                        {isAvailable ? `Rp${(selectedVenue?.courts[0]?.price || 0).toLocaleString('id-ID')}` : 'Penuh'}
+                      </span>
                     </button>
                   );
                 })}
@@ -182,11 +203,11 @@ export default function Booking() {
                     className={`addon-select-card glass-card ${selectedAddOns.includes(a.id) ? 'selected' : ''}`}
                     onClick={() => toggleAddOn(a.id)}
                   >
-                    <span className="asc-icon">{a.icon}</span>
+                    <span className="asc-icon">{getServiceIcon(a.icon, 28)}</span>
                     <h4>{a.name}</h4>
                     <p>{a.description}</p>
                     <span className="asc-price">Rp{a.price.toLocaleString('id-ID')}</span>
-                    {selectedAddOns.includes(a.id) && <span className="asc-check">✓</span>}
+                    {selectedAddOns.includes(a.id) && <span className="asc-check"><Check size={16} /></span>}
                   </button>
                 ))}
               </div>
@@ -208,9 +229,9 @@ export default function Booking() {
                           className={`payment-method ${selectedPayment === m.id ? 'selected' : ''}`}
                           onClick={() => setSelectedPayment(m.id)}
                         >
-                          <span className="pm-icon">{m.icon}</span>
+                          <span className="pm-icon">{getPaymentIcon(m.type, 20)}</span>
                           <span className="pm-name">{m.name}</span>
-                          {selectedPayment === m.id && <span className="pm-check">✓</span>}
+                          {selectedPayment === m.id && <span className="pm-check"><Check size={14} /></span>}
                         </button>
                       ))}
                     </div>

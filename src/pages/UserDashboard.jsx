@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Calendar, Clock, CreditCard, User, FileText, Star, Bell } from 'lucide-react';
 import { bookingHistory, notifications } from '../data/mockData';
+import { IconUserAvatar, getNotifIcon } from '../components/Icons';
 import './Dashboard.css';
 
 export default function UserDashboard() {
@@ -32,7 +33,7 @@ export default function UserDashboard() {
         {/* Header */}
         <div className="dash-header">
           <div className="dash-user">
-            <div className="dash-avatar">👤</div>
+            <div className="dash-avatar"><IconUserAvatar size={32} /></div>
             <div>
               <h1>Halo, Pengguna Demo!</h1>
               <p>demo@fieldclub.id • Anggota sejak Jan 2026</p>
@@ -150,7 +151,7 @@ export default function UserDashboard() {
               <h3 className="tab-title">Edit Profil</h3>
               <form className="profile-form" onSubmit={e => e.preventDefault()}>
                 <div className="pf-avatar-section">
-                  <div className="pf-avatar">👤</div>
+                  <div className="pf-avatar"><IconUserAvatar size={40} /></div>
                   <button type="button" className="btn btn-secondary btn-sm">Ubah Foto</button>
                 </div>
                 <div className="pf-grid">
@@ -184,11 +185,7 @@ export default function UserDashboard() {
                 {notifications.map(n => (
                   <div key={n.id} className={`notif-card glass-card ${!n.read ? 'unread' : ''}`}>
                     <div className="nc-icon">
-                      {n.type === 'booking' && '📋'}
-                      {n.type === 'reminder' && '⏰'}
-                      {n.type === 'payment' && '💳'}
-                      {n.type === 'event' && '🎉'}
-                      {n.type === 'promo' && '🏷️'}
+                      {getNotifIcon(n.type, 22)}
                     </div>
                     <div className="nc-content">
                       <h4>{n.title}</h4>

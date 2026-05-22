@@ -1,6 +1,7 @@
 import { sports } from '../data/mockData';
 import { Check, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getSportIcon, IconCamera, IconVideo, IconFilm, IconDrink } from '../components/Icons';
 import './Pricing.css';
 
 export default function Pricing() {
@@ -8,6 +9,13 @@ export default function Pricing() {
     { name: 'Casual', desc: 'Untuk pemain rekreasi', features: ['Booking per jam', 'Pembayaran online', 'Akses kalender', 'Review lapangan'], highlight: false },
     { name: 'Regular', desc: 'Untuk pemain aktif', features: ['Semua fitur Casual', 'Diskon 10% booking', 'Prioritas booking', 'Notifikasi slot favorit', 'Akses event'], highlight: true },
     { name: 'Community', desc: 'Untuk komunitas & tim', features: ['Semua fitur Regular', 'Diskon 20% booking', 'Buat event sendiri', 'Manajemen tim', 'Dashboard komunitas', 'Support prioritas'], highlight: false },
+  ];
+
+  const addons = [
+    { icon: <IconCamera size={28} />, name: 'Fotografi Olahraga', price: 'Rp150.000', desc: 'Dokumentasi foto profesional' },
+    { icon: <IconVideo size={28} />, name: 'Dokumentasi Video', price: 'Rp250.000', desc: 'Rekaman video HD pertandingan' },
+    { icon: <IconFilm size={28} />, name: 'Dokumentasi Event', price: 'Rp500.000', desc: 'Paket lengkap event komunitas' },
+    { icon: <IconDrink size={28} />, name: 'Paket Minuman', price: 'Rp50.000', desc: 'Air mineral & minuman isotonik' },
   ];
 
   return (
@@ -23,7 +31,7 @@ export default function Pricing() {
           {sports.map((s, i) => (
             <div key={s.id} className="price-sport-card glass-card" style={{ animationDelay: `${i * 0.1}s` }}>
               <div className="price-sport-header" style={{ borderColor: s.color }}>
-                <span className="price-sport-icon" style={{ background: `${s.color}20` }}>{s.icon}</span>
+                <span className="price-sport-icon" style={{ background: `${s.color}20` }}>{getSportIcon(s.icon, 28, s.color)}</span>
                 <h3>{s.name}</h3>
               </div>
               <div className="price-sport-body">
@@ -72,12 +80,7 @@ export default function Pricing() {
             Tingkatkan pengalaman bermain dengan layanan add-on
           </p>
           <div className="addon-grid">
-            {[
-              { icon: '📸', name: 'Fotografi Olahraga', price: 'Rp150.000', desc: 'Dokumentasi foto profesional' },
-              { icon: '🎥', name: 'Dokumentasi Video', price: 'Rp250.000', desc: 'Rekaman video HD pertandingan' },
-              { icon: '🎬', name: 'Dokumentasi Event', price: 'Rp500.000', desc: 'Paket lengkap event komunitas' },
-              { icon: '🥤', name: 'Paket Minuman', price: 'Rp50.000', desc: 'Air mineral & minuman isotonik' },
-            ].map((a, i) => (
+            {addons.map((a, i) => (
               <div key={a.name} className="addon-card glass-card" style={{ animationDelay: `${i * 0.1}s` }}>
                 <span className="addon-icon">{a.icon}</span>
                 <h4>{a.name}</h4>

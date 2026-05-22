@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { IconLightning, IconInstagram, IconTwitter, IconFacebook, IconYoutube } from './Icons';
 import './Footer.css';
 
 export default function Footer() {
@@ -10,17 +11,17 @@ export default function Footer() {
           {/* Brand */}
           <div className="footer-brand">
             <div className="footer-logo">
-              <span className="logo-icon">⚡</span>
+              <span className="logo-icon"><IconLightning size={18} /></span>
               <span className="logo-text">The Field Club</span>
             </div>
             <p className="footer-desc">
               Platform booking lapangan olahraga terjangkau untuk semua. Bermain kapan saja, di mana saja.
             </p>
             <div className="footer-socials">
-              <a href="#" className="social-btn" aria-label="Instagram">📷</a>
-              <a href="#" className="social-btn" aria-label="Twitter">🐦</a>
-              <a href="#" className="social-btn" aria-label="Facebook">📘</a>
-              <a href="#" className="social-btn" aria-label="YouTube">🎬</a>
+              <a href="#" className="social-btn" aria-label="Instagram"><IconInstagram size={18} /></a>
+              <a href="#" className="social-btn" aria-label="Twitter"><IconTwitter size={18} /></a>
+              <a href="#" className="social-btn" aria-label="Facebook"><IconFacebook size={18} /></a>
+              <a href="#" className="social-btn" aria-label="YouTube"><IconYoutube size={18} /></a>
             </div>
           </div>
 
