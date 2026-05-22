@@ -458,12 +458,45 @@ export function generateSchedule(courtId, date) {
 }
 
 export const addOnServices = [
-  { id: 'photo', name: 'Fotografi Olahraga', description: 'Fotografer profesional akan mendokumentasikan permainan Anda', price: 150000, icon: 'photo' },
-  { id: 'video', name: 'Dokumentasi Video', description: 'Rekaman video HD dari pertandingan Anda', price: 250000, icon: 'video' },
-  { id: 'event', name: 'Dokumentasi Event', description: 'Paket lengkap untuk event komunitas', price: 500000, icon: 'event' },
-  { id: 'drinks', name: 'Paket Minuman', description: '10 botol air mineral + 5 minuman isotonik', price: 50000, icon: 'drinks' },
-  { id: 'jersey', name: 'Sewa Jersey Tim', description: '2 set jersey (masing-masing 7 pcs)', price: 75000, icon: 'jersey' },
+  // ── Universal (semua cabor) ─────────────────────────────────────────────────
+  { id: 'photo',    sports: null, name: 'Fotografi Olahraga',   description: 'Fotografer profesional dokumentasi permainan Anda', price: 150000, icon: 'photo' },
+  { id: 'video',    sports: null, name: 'Dokumentasi Video',    description: 'Rekaman video HD dari pertandingan Anda',            price: 250000, icon: 'video' },
+  { id: 'drinks',   sports: null, name: 'Paket Minuman',        description: '10 botol air mineral + 5 minuman isotonik',         price: 50000,  icon: 'drinks' },
+
+  // ── Futsal ──────────────────────────────────────────────────────────────────
+  { id: 'jersey-futsal',  sports: ['futsal'],       name: 'Sewa Jersey Futsal',   description: '2 set jersey futsal (masing-masing 5 pcs)', price: 75000,  icon: 'jersey' },
+  { id: 'bola-futsal',    sports: ['futsal'],       name: 'Sewa Bola Futsal',     description: 'Bola futsal standar SNI siap pakai',          price: 25000,  icon: 'jersey' },
+  { id: 'rompi-futsal',   sports: ['futsal'],       name: 'Rompi Bibs',           description: '10 pcs rompi olahraga berwarna',              price: 20000,  icon: 'jersey' },
+  { id: 'event-futsal',   sports: ['futsal'],       name: 'Paket Turnamen',       description: 'Wasit + papan skor + dokumentasi event',      price: 350000, icon: 'event' },
+
+  // ── Mini Soccer ─────────────────────────────────────────────────────────────
+  { id: 'jersey-soccer',  sports: ['mini-soccer'],  name: 'Sewa Jersey Tim',      description: '2 set jersey (masing-masing 7 pcs)',           price: 100000, icon: 'jersey' },
+  { id: 'bola-soccer',    sports: ['mini-soccer'],  name: 'Sewa Bola Soccer',     description: 'Bola sepak standar FIFA Quality',              price: 30000,  icon: 'jersey' },
+  { id: 'wasit-soccer',   sports: ['mini-soccer'],  name: 'Jasa Wasit',           description: 'Wasit bersertifikat untuk pertandingan resmi',  price: 150000, icon: 'event' },
+  { id: 'event-soccer',   sports: ['mini-soccer'],  name: 'Paket Turnamen',       description: 'Wasit + papan skor + dokumentasi lengkap',     price: 450000, icon: 'event' },
+
+  // ── Basket ──────────────────────────────────────────────────────────────────
+  { id: 'jersey-basket',  sports: ['basket'],       name: 'Sewa Jersey Basket',   description: '2 set jersey basket (masing-masing 5 pcs)',    price: 80000,  icon: 'jersey' },
+  { id: 'bola-basket',    sports: ['basket'],       name: 'Sewa Bola Basket',     description: 'Bola basket size 7 standar FIBA',              price: 25000,  icon: 'jersey' },
+  { id: 'event-basket',   sports: ['basket'],       name: 'Paket 3on3 Event',     description: 'Wasit + scoresheet + dokumentasi event',       price: 300000, icon: 'event' },
+
+  // ── Padel ───────────────────────────────────────────────────────────────────
+  { id: 'raket-padel',    sports: ['padel'],        name: 'Sewa Raket Padel',     description: '2 raket padel + 3 bola padel siap main',       price: 50000,  icon: 'jersey' },
+  { id: 'lesson-padel',   sports: ['padel'],        name: 'Sesi Coaching Padel',  description: '1 jam bersama coach padel bersertifikat',      price: 200000, icon: 'event' },
+  { id: 'event-padel',    sports: ['padel'],        name: 'Paket Padel Event',    description: 'Wasit + skor digital + dokumentasi turnamen',   price: 400000, icon: 'event' },
+
+  // ── Tenis ───────────────────────────────────────────────────────────────────
+  { id: 'raket-tenis',    sports: ['tenis'],        name: 'Sewa Raket Tenis',     description: '2 raket tenis + 1 tabung bola (3 pcs)',        price: 40000,  icon: 'jersey' },
+  { id: 'lesson-tenis',   sports: ['tenis'],        name: 'Sesi Coaching Tenis',  description: '1 jam bersama pelatih tenis berpengalaman',    price: 175000, icon: 'event' },
+  { id: 'stringing',      sports: ['tenis'],        name: 'Jasa Stringing Raket', description: 'Restring raket dengan senar berkualitas',       price: 80000,  icon: 'jersey' },
+
+  // ── Badminton ───────────────────────────────────────────────────────────────
+  { id: 'raket-badminton', sports: ['badminton'],   name: 'Sewa Raket Badminton', description: '2 raket + 1 tube shuttlecock (6 pcs)',         price: 30000,  icon: 'jersey' },
+  { id: 'kok-badminton',   sports: ['badminton'],   name: 'Paket Shuttlecock',    description: '1 tube shuttlecock premium (12 pcs)',           price: 45000,  icon: 'jersey' },
+  { id: 'lesson-badminton',sports: ['badminton'],   name: 'Sesi Coaching',        description: '1 jam bersama pelatih badminton berpengalaman', price: 150000, icon: 'event' },
+  { id: 'stringing-bad',   sports: ['badminton'],   name: 'Jasa Stringing Raket', description: 'Restring raket badminton dengan senar premium', price: 60000,  icon: 'jersey' },
 ];
+
 
 export const paymentMethods = [
   { id: 'bca', name: 'Transfer BCA', type: 'bank', icon: 'bank' },

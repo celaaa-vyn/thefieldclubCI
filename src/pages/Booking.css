@@ -213,6 +213,19 @@
 .addon-select-card.selected { border-color: var(--primary); }
 
 .asc-icon { font-size: 2rem; display: block; margin-bottom: 8px; }
+.asc-universal-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  margin-bottom: 6px;
+}
 .addon-select-card h4 { font-size: 1.2rem; margin-bottom: 4px; color: var(--text-primary); letter-spacing: 1px; }
 .addon-select-card p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
 .asc-price { font-weight: 700; color: var(--accent-orange); }

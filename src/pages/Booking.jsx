@@ -61,6 +61,12 @@ export default function Booking() {
     return courtPrice + addOnPrice;
   };
 
+  // Filter add-ons: universal (sports === null) + matching sport
+  const activeSport = selectedSport || fromCourtDetail?.sport || '';
+  const filteredAddOns = addOnServices.filter(
+    a => a.sports === null || (activeSport && a.sports.includes(activeSport))
+  );
+
   const paymentGroups = {
     'Transfer Bank': paymentMethods.filter(p => p.type === 'bank'),
     'QRIS': paymentMethods.filter(p => p.type === 'qris'),
@@ -196,14 +202,20 @@ export default function Booking() {
           {step === 4 && (
             <div className="step-content animate-fade-up">
               <h2>Layanan Tambahan <span className="optional-tag">Opsional</span></h2>
+              {activeSport && (
+                <p className="step-note">
+                  Menampilkan layanan untuk: <strong>{sports.find(s => s.id === activeSport)?.name || activeSport}</strong>
+                </p>
+              )}
               <div className="addon-select-grid">
-                {addOnServices.map(a => (
+                {filteredAddOns.map(a => (
                   <button
                     key={a.id}
                     className={`addon-select-card glass-card ${selectedAddOns.includes(a.id) ? 'selected' : ''}`}
                     onClick={() => toggleAddOn(a.id)}
                   >
                     <span className="asc-icon">{getServiceIcon(a.icon, 28)}</span>
+                    {a.sports === null && <span className="asc-universal-tag">Universal</span>}
                     <h4>{a.name}</h4>
                     <p>{a.description}</p>
                     <span className="asc-price">Rp{a.price.toLocaleString('id-ID')}</span>
