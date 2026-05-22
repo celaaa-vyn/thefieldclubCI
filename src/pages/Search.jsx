@@ -141,8 +141,16 @@ export default function SearchPage() {
                     src={v.image}
                     alt={v.name}
                     className="result-venue-img"
+                    loading="lazy"
+                    decoding="async"
+                    onLoad={e => {
+                      e.target.classList.add('loaded');
+                      e.target.parentElement.style.animation = 'none';
+                      e.target.parentElement.style.background = 'none';
+                    }}
                     onError={e => {
                       e.target.style.display = 'none';
+                      e.target.parentElement.style.animation = 'none';
                       e.target.parentElement.style.background = `linear-gradient(135deg, ${sportColor}30, var(--bg-elevated))`;
                     }}
                   />

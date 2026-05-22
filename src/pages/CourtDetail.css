@@ -60,6 +60,9 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   position: relative;
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-card) 50%, var(--bg-elevated) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
 
 .cd-venue-img {
@@ -67,7 +70,12 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s ease;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.5s ease;
+}
+
+.cd-venue-img.loaded {
+  opacity: 1;
 }
 
 .cd-venue-img:hover {

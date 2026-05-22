@@ -71,7 +71,17 @@ export default function CourtDetail() {
               src={venue.image}
               alt={venue.name}
               className="cd-venue-img"
-              onError={e => { e.target.style.display = 'none'; }}
+              loading="eager"
+              decoding="async"
+              onLoad={e => {
+                e.target.classList.add('loaded');
+                e.target.parentElement.style.animation = 'none';
+                e.target.parentElement.style.background = 'none';
+              }}
+              onError={e => {
+                e.target.style.display = 'none';
+                e.target.parentElement.style.animation = 'none';
+              }}
             />
           </div>
         </div>

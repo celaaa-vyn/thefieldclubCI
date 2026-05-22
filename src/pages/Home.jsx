@@ -89,9 +89,9 @@ export default function Home() {
   }, []);
 
   const stats = [
-    { value: '2,400+', label: 'Pengguna Aktif' },
-    { value: '50+', label: 'Venue Partner' },
-    { value: '10,000+', label: 'Booking Berhasil' },
+    { value: '100+', label: 'Pengguna Aktif' },
+    { value: '15+', label: 'Venue Partner' },
+    { value: '300+', label: 'Booking Berhasil' },
     { value: '4.8★', label: 'Rating Rata-rata' },
   ];
 
