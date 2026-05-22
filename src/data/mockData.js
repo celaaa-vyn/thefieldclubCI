@@ -24,7 +24,7 @@ export const venues = [
     sports: ['futsal'],
     rating: 4.5,
     reviewCount: 47,
-    image: '/assets/Futsal/Futsal Corner Bekasi.png',
+    image: '/assets/Futsal/Futsal Corner Bekasi.webp',
     priceDisplay: 'Rp65.000/jam',
     courts: [
       { id: 'fc-c1', name: 'Court 1', sport: 'futsal', price: 65000, unit: 'jam' },
@@ -47,7 +47,7 @@ export const venues = [
     sports: ['futsal'],
     rating: 4.5,
     reviewCount: 83,
-    image: '/assets/Futsal/Estadio Futsal.png',
+    image: '/assets/Futsal/Estadio Futsal.webp',
     priceDisplay: 'Rp100.000/sesi',
     courts: [
       { id: 'ef-c1', name: 'Vinyl Court 1', sport: 'futsal', price: 100000, unit: 'sesi' },
@@ -70,7 +70,7 @@ export const venues = [
     sports: ['futsal'],
     rating: 4.4,
     reviewCount: 61,
-    image: '/assets/Futsal/Futsal Town.png',
+    image: '/assets/Futsal/Futsal Town.webp',
     priceDisplay: 'Rp120.000/jam',
     courts: [
       { id: 'ft-c1', name: 'Court 1', sport: 'futsal', price: 120000, unit: 'jam' },
@@ -95,7 +95,7 @@ export const venues = [
     sports: ['padel'],
     rating: 4.9,
     reviewCount: 128,
-    image: '/assets/Padel/GOPLAY PADEL BEKASI.png',
+    image: '/assets/Padel/GOPLAY PADEL BEKASI.webp',
     priceDisplay: 'Rp150.000/sesi',
     courts: [
       { id: 'gp-c1', name: 'Panoramic Court 1', sport: 'padel', price: 150000, unit: 'sesi' },
@@ -118,7 +118,7 @@ export const venues = [
     sports: ['padel'],
     rating: 4.9,
     reviewCount: 214,
-    image: '/assets/Padel/Kinetic Padel Arena.png',
+    image: '/assets/Padel/Kinetic Padel Arena.webp',
     priceDisplay: 'Rp180.000/sesi',
     courts: [
       { id: 'kp-c1', name: 'Court 1', sport: 'padel', price: 180000, unit: 'sesi' },
@@ -141,7 +141,7 @@ export const venues = [
     sports: ['padel'],
     rating: 4.9,
     reviewCount: 95,
-    image: '/assets/Padel/PadMan Padelground.png',
+    image: '/assets/Padel/PadMan Padelground.webp',
     priceDisplay: 'Rp180.000/sesi',
     courts: [
       { id: 'pm-c1', name: 'Court A', sport: 'padel', price: 180000, unit: 'sesi' },
@@ -166,7 +166,7 @@ export const venues = [
     sports: ['mini-soccer'],
     rating: 4.5,
     reviewCount: 39,
-    image: '/assets/Mini Soccer/X Bro Minisoccer.png',
+    image: '/assets/Mini Soccer/X Bro Minisoccer.webp',
     priceDisplay: 'Rp300.000/jam',
     courts: [
       { id: 'xb-c1', name: 'Field 1', sport: 'mini-soccer', price: 300000, unit: 'jam' },
@@ -189,7 +189,7 @@ export const venues = [
     sports: ['mini-soccer'],
     rating: 4.7,
     reviewCount: 72,
-    image: '/assets/Mini Soccer/Ramuna Mini Soccer Bekasi.png',
+    image: '/assets/Mini Soccer/Ramuna Mini Soccer Bekasi.webp',
     priceDisplay: 'Rp700.000/sesi',
     courts: [
       { id: 'rm-c1', name: 'Field A', sport: 'mini-soccer', price: 700000, unit: 'sesi' },
@@ -212,7 +212,7 @@ export const venues = [
     sports: ['mini-soccer'],
     rating: 4.6,
     reviewCount: 53,
-    image: '/assets/Mini Soccer/Mustika mini soccer.png',
+    image: '/assets/Mini Soccer/Mustika mini soccer.webp',
     priceDisplay: 'Rp450.000/jam',
     courts: [
       { id: 'ms-c1', name: 'Field 1', sport: 'mini-soccer', price: 450000, unit: 'jam' },
@@ -237,7 +237,7 @@ export const venues = [
     sports: ['basket'],
     rating: 3.0,
     reviewCount: 18,
-    image: '/assets/Basket/Lapangan Basket Boulevard Hijau.jpg',
+    image: '/assets/Basket/Lapangan Basket Boulevard Hijau.webp',
     priceDisplay: 'Rp100.000/jam',
     courts: [
       { id: 'bb-c1', name: 'Court 1', sport: 'basket', price: 100000, unit: 'jam' },
@@ -260,7 +260,7 @@ export const venues = [
     sports: ['basket'],
     rating: 4.0,
     reviewCount: 34,
-    image: '/assets/Basket/GOR Sekda Saefullah.jpg',
+    image: '/assets/Basket/GOR Sekda Saefullah.webp',
     priceDisplay: 'Rp110.000/2 jam',
     courts: [
       { id: 'gs-c1', name: 'Indoor Court 1', sport: 'basket', price: 110000, unit: '2jam' },
@@ -283,7 +283,7 @@ export const venues = [
     sports: ['basket'],
     rating: 3.0,
     reviewCount: 26,
-    image: '/assets/Basket/Bendella Basket.jpg',
+    image: '/assets/Basket/Bendella Basket.webp',
     priceDisplay: 'Rp125.000/jam',
     courts: [
       { id: 'bd-c1', name: 'Vinyl Court 1', sport: 'basket', price: 125000, unit: 'jam' },
@@ -308,7 +308,7 @@ export const venues = [
     sports: ['tenis'],
     rating: 3.0,
     reviewCount: 11,
-    image: '/assets/Tennis/Lapangan Tenis Boulevard Hijau.jpg',
+    image: '/assets/Tennis/Lapangan Tenis Boulevard Hijau.webp',
     priceDisplay: 'Rp70.000/jam',
     courts: [
       { id: 'tb-c1', name: 'Court 1', sport: 'tenis', price: 70000, unit: 'jam' },
@@ -331,7 +331,7 @@ export const venues = [
     sports: ['tenis'],
     rating: 4.0,
     reviewCount: 29,
-    image: '/assets/Tennis/GHP Tennis Court & Futsal GRIYA FUTSAL & TENNIS COURTS.jpg',
+    image: '/assets/Tennis/GHP Tennis Court & Futsal GRIYA FUTSAL & TENNIS COURTS.webp',
     priceDisplay: 'Rp50.000/jam',
     courts: [
       { id: 'gh-c1', name: 'Court 1', sport: 'tenis', price: 50000, unit: 'jam' },
@@ -354,7 +354,7 @@ export const venues = [
     sports: ['tenis'],
     rating: 4.5,
     reviewCount: 44,
-    image: '/assets/Tennis/Lapangan Tenis Flamboyan.jpg',
+    image: '/assets/Tennis/Lapangan Tenis Flamboyan.webp',
     priceDisplay: 'Rp70.000/jam',
     courts: [
       { id: 'tf-c1', name: 'Court A', sport: 'tenis', price: 70000, unit: 'jam' },
@@ -379,7 +379,7 @@ export const venues = [
     sports: ['badminton'],
     rating: 4.6,
     reviewCount: 108,
-    image: '/assets/Badminton/Dian Jaya Badminton Gor.png',
+    image: '/assets/Badminton/Dian Jaya Badminton Gor.webp',
     priceDisplay: 'Rp56.000/jam',
     courts: [
       { id: 'dj-c1', name: 'Court 1', sport: 'badminton', price: 56000, unit: 'jam' },
@@ -402,7 +402,7 @@ export const venues = [
     sports: ['badminton'],
     rating: 4.5,
     reviewCount: 76,
-    image: '/assets/Badminton/Pertiwi Sport.png',
+    image: '/assets/Badminton/Pertiwi Sport.webp',
     priceDisplay: 'Rp45.000/jam',
     courts: [
       { id: 'ps-c1', name: 'Court 1', sport: 'badminton', price: 45000, unit: 'jam' },
@@ -425,7 +425,7 @@ export const venues = [
     sports: ['badminton'],
     rating: 4.5,
     reviewCount: 57,
-    image: '/assets/Badminton/GOR Ferry Jaya Badminton Hall.png',
+    image: '/assets/Badminton/GOR Ferry Jaya Badminton Hall.webp',
     priceDisplay: 'Rp35.000/jam',
     courts: [
       { id: 'fj-c1', name: 'Court 1', sport: 'badminton', price: 35000, unit: 'jam' },
