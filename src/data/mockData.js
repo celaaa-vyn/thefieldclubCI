@@ -563,9 +563,9 @@ export const ownerStats = {
 
 // Data dashboard admin
 export const adminStats = {
-  totalUsers: 2450,
+  totalUsers: 150,
   totalVenues: 18,
-  totalTransactions: 1842,
+  totalTransactions: 325,
   totalRevenue: 125000000,
   recentUsers: [
     { id: 'U001', name: 'Ahmad Rizky', email: 'ahmad@email.com', role: 'user', joinDate: '2026-01-15', bookings: 12 },
